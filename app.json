@@ -2,6 +2,7 @@
   "expo": {
     "name": "KamiReact",
     "slug": "KamiReact",
+    "newArchEnabled": true,
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -20,6 +21,7 @@
         "backgroundColor": "#ffffff"
       }
     },
+    "useNextNotificationsApi": true,
     "web": {
       "favicon": "./assets/favicon.png"
     }
