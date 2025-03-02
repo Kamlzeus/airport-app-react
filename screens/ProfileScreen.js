@@ -9,8 +9,10 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { useAuth } from "../context/AuthContext"; // Для работы с аутентификацией
+import { useTranslation } from "react-i18next";
 
 const ProfileScreen = () => {
+  const { t } = useTranslation();
   const { user, logout } = useAuth(); // Доступ к информации о пользователе и функции выхода
   const [isEditing, setIsEditing] = useState(false); // Состояние редактирования
   const [name, setName] = useState(user?.name || "");
@@ -35,7 +37,7 @@ const ProfileScreen = () => {
       </View>
 
       <View style={styles.infoSection}>
-        <Text style={styles.label}>Имя</Text>
+        <Text style={styles.label}>{t("Имя")}</Text>
         <TextInput
           style={styles.input}
           value={name}
@@ -51,7 +53,7 @@ const ProfileScreen = () => {
           editable={isEditing}
         />
 
-        <Text style={styles.label}>Пароль</Text>
+        <Text style={styles.label}>{t("Пароль")}</Text>
         <TextInput
           style={styles.input}
           value={password}
@@ -63,15 +65,15 @@ const ProfileScreen = () => {
 
       <View style={styles.buttonsSection}>
         {isEditing ? (
-          <Button title="Сохранить" onPress={handleSave} />
+          <Button title={t("Сохранить")} onPress={handleSave} />
         ) : (
           <Button
-            title="Редактировать профиль"
+            title={t("Редактировать профиль")}
             onPress={() => setIsEditing(true)}
           />
         )}
         <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
-          <Text style={styles.logoutText}>Выйти из аккаунта</Text>
+          <Text style={styles.logoutText}>{t("Выйти из аккаунта")}</Text>
         </TouchableOpacity>
       </View>
     </View>

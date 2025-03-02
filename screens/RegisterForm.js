@@ -7,32 +7,34 @@ import {
   StyleSheet,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
+import { useTranslation } from "react-i18next";
 
 const RegisterForm = ({ onRegister }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const { t } = useTranslation();
 
   return (
     <View>
       <TextInput
-        placeholder="Имя"
+        placeholder={t("Имя")}
         style={styles.input}
         value={username}
         onChangeText={setUsername}
       />
-      <TextInput placeholder="Фамилия" style={styles.input} />
-      <TextInput placeholder="Электронная почта" style={styles.input} />
-      <TextInput placeholder="Код страны" style={styles.input} />
-      <TextInput placeholder="Мобильный телефон" style={styles.input} />
+      <TextInput placeholder={t("Фамилия")} style={styles.input} />
+      <TextInput placeholder={t("Электронная почта")} style={styles.input} />
+      <TextInput placeholder={t("Код страны")} style={styles.input} />
+      <TextInput placeholder={t("Мобильный телефон")} style={styles.input} />
       <TextInput
-        placeholder="Пароль"
+        placeholder={t("Пароль")}
         secureTextEntry
         style={styles.input}
         value={password}
         onChangeText={setPassword}
       />
       <TextInput
-        placeholder="Повторите пароль"
+        placeholder={t("Повторите пароль")}
         secureTextEntry
         style={styles.input}
       />
@@ -43,7 +45,7 @@ const RegisterForm = ({ onRegister }) => {
           end={{ x: 1, y: 1 }}
           style={styles.registerButton}
         >
-          <Text style={styles.buttonText}>Зарегистрироваться</Text>
+          <Text style={styles.buttonText}>{t("Зарегистрироваться")}</Text>
         </LinearGradient>
       </TouchableOpacity>
     </View>

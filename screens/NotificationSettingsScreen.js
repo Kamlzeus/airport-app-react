@@ -9,6 +9,7 @@ import {
 import * as Notifications from "expo-notifications";
 import DateTimePicker from "@react-native-community/datetimepicker";
 import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { useTranslation } from "react-i18next";
 
 Notifications.setNotificationHandler({
   handleNotification: async () => ({
@@ -19,6 +20,7 @@ Notifications.setNotificationHandler({
 });
 
 const NotificationSettingsScreen = () => {
+  const { t } = useTranslation();
   const [date, setDate] = useState(new Date());
   const [showPicker, setShowPicker] = useState(false);
   const [notificationEnabled, setNotificationEnabled] = useState(false);
@@ -30,7 +32,7 @@ const NotificationSettingsScreen = () => {
       const { status: newStatus } =
         await Notifications.requestPermissionsAsync();
       if (newStatus !== "granted") {
-        alert("Разрешение на уведомления не предоставлено.");
+        alert(t("Разрешение на уведомления не предоставлено."));
         return false;
       }
     }
@@ -40,7 +42,7 @@ const NotificationSettingsScreen = () => {
   const sendInstantNotification = async (message) => {
     await Notifications.scheduleNotificationAsync({
       content: {
-        title: "Подтверждение",
+        title: t("Подтверждение"),
         body: message,
         sound: true,
       },
@@ -57,8 +59,8 @@ const NotificationSettingsScreen = () => {
 
     await Notifications.scheduleNotificationAsync({
       content: {
-        title: "Напоминание",
-        body: "У вас осталось 2 часа до рейса!",
+        title: t("Напоминание"),
+        body: t("У вас осталось 2 часа до рейса!"),
         sound: true,
       },
       trigger: {
@@ -69,7 +71,8 @@ const NotificationSettingsScreen = () => {
     });
 
     await sendInstantNotification(
-      "Уведомление успешно запланировано на " + triggerTime.toLocaleTimeString()
+      t("Уведомление успешно запланировано на ") +
+        triggerTime.toLocaleTimeString()
     );
   };
 
@@ -77,7 +80,7 @@ const NotificationSettingsScreen = () => {
     setNotificationEnabled((prev) => !prev);
     if (notificationEnabled) {
       await Notifications.cancelAllScheduledNotificationsAsync();
-      alert("Все уведомления отключены.");
+      alert(t("Все уведомления отключены."));
     } else {
       await scheduleNotification();
     }
@@ -100,16 +103,16 @@ const NotificationSettingsScreen = () => {
 
   return (
     <Animated.View style={[styles.container, { opacity: fadeAnim }]}>
-      <Text style={styles.title}>Настройка уведомлений</Text>
+      <Text style={styles.title}>{t("Настройка уведомлений")}</Text>
       <Text style={styles.description}>
-        Выберите время для напоминания перед рейсом.
+        {t("Выберите время для напоминания перед рейсом.")}
       </Text>
 
       <TouchableOpacity
         style={styles.timePickerButton}
         onPress={() => setShowPicker(true)}
       >
-        <Text style={styles.buttonText}>Выбрать время уведомления</Text>
+        <Text style={styles.buttonText}>{t("Выбрать время уведомления")}</Text>
         <MaterialCommunityIcons name="clock-outline" size={24} color="white" />
       </TouchableOpacity>
 
@@ -126,7 +129,7 @@ const NotificationSettingsScreen = () => {
         style={styles.scheduleButton}
         onPress={scheduleNotification}
       >
-        <Text style={styles.buttonText}>Запланировать напоминание</Text>
+        <Text style={styles.buttonText}>{t("Запланировать напоминание")}</Text>
       </TouchableOpacity>
 
       <View style={styles.notificationSection}>
@@ -139,12 +142,13 @@ const NotificationSettingsScreen = () => {
         >
           <Text style={styles.toggleButtonText}>
             {notificationEnabled
-              ? "Выключить уведомления"
-              : "Включить уведомления"}
+              ? t("Выключить уведомления")
+              : t("Включить уведомления")}
           </Text>
         </TouchableOpacity>
         <Text style={styles.notificationStatus}>
-          Уведомления {notificationEnabled ? "включены" : "выключены"}
+          {t("Уведомления")}{" "}
+          {notificationEnabled ? t("включены") : t("выключены")}
         </Text>
       </View>
     </Animated.View>

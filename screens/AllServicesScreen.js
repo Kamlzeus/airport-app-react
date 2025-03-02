@@ -8,80 +8,78 @@ import {
   TouchableOpacity,
   Image,
 } from "react-native";
+import { useTranslation } from "react-i18next";
 
 const AllServicesScreen = () => {
+  const { t } = useTranslation();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("Все");
 
   const services = [
     {
       id: 1,
-      name: "DutyFree",
-      category: "Шопинг",
+      name: t("Такси и Транспорт"),
+      category: t("Такси"),
+      image: require("../assets/taxi-bus.png"),
     },
     {
       id: 2,
-      name: "Sierra",
-      category: "Еда и напитки",
-      image: require("../assets/sierra.jpeg"),
+      name: t("Магазины"),
+      category: t("Шопинг"),
+      image: require("../assets/store-alt-5.png"),
     },
     {
       id: 3,
-      name: "Туалет",
-      category: "Путеводитель",
+      name: t("Кафе"),
+      category: t("Еда"),
+      image: require("../assets/restaurant.png"),
     },
     {
       id: 4,
-      name: "Starbucks",
-      category: "Еда и напитки",
-    },
-    {
-      id: 5,
-      name: "Be adam",
-      category: "Шопинг",
-    },
-    {
-      id: 6,
-      name: "Информация",
-      category: "Путеводитель",
+      name: t("Информация"),
+      category: t("Инфо"),
+      image: require("../assets/square-info.png"),
     },
   ];
 
   const filteredServices = services.filter(
     (service) =>
-      (selectedCategory === "Все" || service.category === selectedCategory) &&
+      (selectedCategory === t("Все") ||
+        service.category === selectedCategory) &&
       service.name.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
   return (
     <View style={styles.container}>
       <TextInput
-        placeholder="Поиск услуг..."
+        placeholder={t("Поиск услуг...")}
         style={styles.searchInput}
         value={searchQuery}
         onChangeText={setSearchQuery}
       />
 
       <View style={styles.filters}>
-        {["Все", "Шопинг", "Еда и напитки", "Путеводитель"].map((category) => (
-          <TouchableOpacity
-            key={category}
-            onPress={() => setSelectedCategory(category)}
-            style={[
-              styles.filterButton,
-              selectedCategory === category && styles.selectedFilterButton,
-            ]}
-          >
-            <Text
+        {[t("Все"), t("Такси"), t("Шопинг"), t("Еда"), t("Инфо")].map(
+          (category) => (
+            <TouchableOpacity
+              key={category}
+              onPress={() => setSelectedCategory(category)}
               style={[
-                styles.filterText,
-                selectedCategory === category && styles.selectedFilterText,
+                styles.filterButton,
+                selectedCategory === category && styles.selectedFilterButton,
               ]}
             >
-              {category}
-            </Text>
-          </TouchableOpacity>
-        ))}
+              <Text
+                style={[
+                  styles.filterText,
+                  selectedCategory === category && styles.selectedFilterText,
+                ]}
+              >
+                {category}
+              </Text>
+            </TouchableOpacity>
+          )
+        )}
       </View>
 
       <ScrollView contentContainerStyle={styles.servicesList}>
@@ -103,7 +101,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#f9f9f9",
   },
   searchInput: {
-    marginTop: 50,
+    marginTop: 10,
     paddingHorizontal: 15,
     backgroundColor: "white",
     borderRadius: 25,
@@ -122,10 +120,10 @@ const styles = StyleSheet.create({
   },
   filterButton: {
     flex: 1,
-    paddingVertical: 12,
+    paddingVertical: 15,
     backgroundColor: "#f0f0f0",
-    borderRadius: 25,
-    marginRight: 10,
+    borderRadius: 20,
+    marginRight: 3,
     alignItems: "center",
     justifyContent: "center",
   },

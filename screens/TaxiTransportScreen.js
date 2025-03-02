@@ -1,7 +1,15 @@
 import React from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Linking } from "react-native";
+import {
+  View,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  Linking,
+} from "react-native";
+import { useTranslation } from "react-i18next";
 
 const TaxiTransportScreen = () => {
+  const { t } = useTranslation();
   const handleOrderTaxi = () => {
     const url = "https://taxi.yandex.ru/ru_ru/";
     Linking.openURL(url).catch((err) =>
@@ -11,13 +19,15 @@ const TaxiTransportScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Такси и транспорт</Text>
+      <Text style={styles.title}>{t("Такси и транспорт")}</Text>
       <Text style={styles.description}>
-        Здесь вы можете заказать такси до аэропорта{"\n"}«Манас»
+        {t("Здесь вы можете заказать такси до аэропорта")}
+        {"\n"}
+        {t("«Манас»")}
       </Text>
       {/* Кнопка для заказа такси */}
       <TouchableOpacity style={styles.button} onPress={handleOrderTaxi}>
-        <Text style={styles.buttonText}>Заказать такси</Text>
+        <Text style={styles.buttonText}>{t("Заказать такси")}</Text>
       </TouchableOpacity>
     </View>
   );

@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { View, StyleSheet, Button, Image } from "react-native";
 import ImageZoomViewer from "react-native-image-zoom-viewer";
 import Svg, { Polyline } from "react-native-svg";
+import { useTranslation } from "react-i18next";
 
 const floorImages = {
   1: require("../assets/floor1.jpeg"),
@@ -39,6 +40,7 @@ const Route = ({ floor }) => {
 };
 
 const AirportMap = () => {
+  const { t } = useTranslation();
   const [activeFloor, setActiveFloor] = useState(1);
 
   const images = [
@@ -58,9 +60,9 @@ const AirportMap = () => {
       />
       <Route floor={activeFloor} />{" "}
       <View style={styles.buttonContainer}>
-        <Button title="Этаж 1" onPress={() => setActiveFloor(1)} />
-        <Button title="Этаж 2" onPress={() => setActiveFloor(2)} />
-        <Button title="Этаж 3" onPress={() => setActiveFloor(3)} />
+        <Button title={t("Этаж 1")} onPress={() => setActiveFloor(1)} />
+        <Button title={t("Этаж 2")} onPress={() => setActiveFloor(2)} />
+        <Button title={t("Этаж 3")} onPress={() => setActiveFloor(3)} />
       </View>
     </View>
   );

@@ -1,8 +1,10 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
+import { useTranslation } from "react-i18next";
 
 const TicketPurchaseScreen = ({ route, navigation }) => {
   const { purchasedFlight } = route.params; // Получаем данные рейса
+  const { t } = useTranslation();
 
   const [isPurchasing, setIsPurchasing] = useState(false);
 
@@ -12,27 +14,33 @@ const TicketPurchaseScreen = ({ route, navigation }) => {
     // Имитация процесса покупки
     setTimeout(() => {
       setIsPurchasing(false);
-      Alert.alert("Успех", "Ваш билет успешно куплен!");
+      Alert.alert(t("Ваш билет успешно куплен!"));
       navigation.navigate("Главная"); // Переход на страницу профиля после покупки
     }, 2000);
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Подтверждение покупки билета</Text>
+      <Text style={styles.header}>{t("Подтверждение покупки билета")}</Text>
       <View style={styles.flightCard}>
         <Text style={styles.flightText}>
-          Авиалиния: {purchasedFlight.airline}
+          {t("Авиалиния")}: {purchasedFlight.airline}
         </Text>
         <Text style={styles.flightText}>
-          Рейс: {purchasedFlight.flightNumber}
+          {t("Рейс")}: {purchasedFlight.flightNumber}
         </Text>
-        <Text style={styles.flightText}>Откуда: {purchasedFlight.origin}</Text>
         <Text style={styles.flightText}>
-          Куда: {purchasedFlight.destination}
+          {t("Откуда")}: {purchasedFlight.origin}
         </Text>
-        <Text style={styles.flightText}>Дата: {purchasedFlight.date}</Text>
-        <Text style={styles.flightText}>Время: {purchasedFlight.time}</Text>
+        <Text style={styles.flightText}>
+          {t("Куда")}: {purchasedFlight.destination}
+        </Text>
+        <Text style={styles.flightText}>
+          {t("Дата")}: {purchasedFlight.date}
+        </Text>
+        <Text style={styles.flightText}>
+          {t("Время")}: {purchasedFlight.time}
+        </Text>
       </View>
       <TouchableOpacity
         style={styles.buyButton}
@@ -40,7 +48,7 @@ const TicketPurchaseScreen = ({ route, navigation }) => {
         disabled={isPurchasing}
       >
         <Text style={styles.buyButtonText}>
-          {isPurchasing ? "Покупка..." : "Купить билет"}
+          {isPurchasing ? t("Покупка...") : t("Купить билет")}
         </Text>
       </TouchableOpacity>
     </View>

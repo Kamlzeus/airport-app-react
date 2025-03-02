@@ -1,24 +1,26 @@
 import React from "react";
 import { View, Text, TouchableOpacity, StyleSheet } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { useTranslation } from "react-i18next";
 
 const SettingsScreen = () => {
   const navigation = useNavigation();
+  const { t } = useTranslation();
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Настройки</Text>
+      <Text style={styles.title}>{t("Настройки")}</Text>
       <TouchableOpacity
         style={styles.button}
         onPress={() => navigation.navigate("Profile")}
       >
-        <Text style={styles.buttonText}>Перейти в профиль</Text>
+        <Text style={styles.buttonText}>{t("Перейти в профиль")}</Text>
       </TouchableOpacity>
       <TouchableOpacity
         style={styles.button}
         onPress={() => navigation.navigate("Уведомления")}
       >
-        <Text style={styles.buttonText}>Настройки уведомлений</Text>
+        <Text style={styles.buttonText}>{t("Настройки уведомлений")}</Text>
       </TouchableOpacity>
     </View>
   );

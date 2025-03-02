@@ -1,43 +1,59 @@
 import React, { useState } from "react";
-import { View, Text, TextInput, StyleSheet, TouchableOpacity, Alert } from "react-native";
+import {
+  View,
+  Text,
+  TextInput,
+  StyleSheet,
+  TouchableOpacity,
+  Alert,
+} from "react-native";
+import { useTranslation } from "react-i18next";
 
 const BookingScreen = ({ route }) => {
+  const { t } = useTranslation();
   const { hotel } = route.params;
   const [checkInDate, setCheckInDate] = useState("");
   const [checkOutDate, setCheckOutDate] = useState("");
 
   const handleConfirmBooking = () => {
     if (!checkInDate || !checkOutDate) {
-      Alert.alert("Ошибка", "Пожалуйста, выберите даты.");
+      Alert.alert(t("Ошибка", "Пожалуйста, выберите даты."));
       return;
     }
 
     Alert.alert(
-      "Бронирование подтверждено!",
-      `Отель: ${hotel.name}\nДата заезда: ${checkInDate}\nДата выезда: ${checkOutDate}`
+      t("Бронирование подтверждено!"),
+      t(
+        `'Отель': ${hotel.name}\n'Дата заезда': ${checkInDate}\n'Дата выезда': ${checkOutDate}`
+      )
     );
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Бронирование отеля</Text>
+      <Text style={styles.header}>{t("Бронирование отеля")}</Text>
       <Text style={styles.hotelName}>{hotel.name}</Text>
 
       <TextInput
-        placeholder="Дата заезда (например, 2024-12-01)"
+        placeholder={t("Дата заезда (например, 2024-12-01)")}
         value={checkInDate}
         onChangeText={setCheckInDate}
         style={styles.input}
       />
       <TextInput
-        placeholder="Дата выезда (например, 2024-12-05)"
+        placeholder={t("Дата выезда (например, 2024-12-05)")}
         value={checkOutDate}
         onChangeText={setCheckOutDate}
         style={styles.input}
       />
 
-      <TouchableOpacity style={styles.confirmButton} onPress={handleConfirmBooking}>
-        <Text style={styles.confirmButtonText}>Подтвердить бронирование</Text>
+      <TouchableOpacity
+        style={styles.confirmButton}
+        onPress={handleConfirmBooking}
+      >
+        <Text style={styles.confirmButtonText}>
+          {t("Подтвердить бронирование")}
+        </Text>
       </TouchableOpacity>
     </View>
   );

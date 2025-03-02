@@ -14,59 +14,55 @@ import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useNavigation } from "@react-navigation/native";
 import { Linking } from "react-native";
+import { useTranslation } from "react-i18next";
 
 const HomeScreen = () => {
+  const { t } = useTranslation();
   const navigation = useNavigation();
   const [searchQuery, setSearchQuery] = useState("");
 
   const services = [
-    { id: 6, name: "Аренда машин", image: require("../assets/car-alt.png") },
-    {
-      id: 7,
-      name: "Бронирование отеля",
-      image: require("../assets/h-square.png"),
-    },
     {
       id: 2,
-      name: "Такси и транспорт",
+      name: t("Такси и транспорт"),
       image: require("../assets/taxi-bus.png"),
     },
-    { id: 1, name: "Автопарк", image: require("../assets/parking.png") },
-    { id: 3, name: "Магазины", image: require("../assets/store-alt-5.png") },
-    { id: 4, name: "Кафе", image: require("../assets/restaurant.png") },
-    { id: 5, name: "Информация", image: require("../assets/square-info.png") },
-  ];
-
-  const stories = [
-    { id: 1, title: "Добро пожаловать!", image: require("../assets/TSI.jpg") },
-    { id: 2, title: "Новые услуги", image: require("../assets/Reklama.png") },
-    { id: 3, title: "Скидки на рейсы", image: require("../assets/TSI.jpg") },
-    { id: 4, title: "Регистрация!", image: require("../assets/Auca.jpg") },
-    { id: 5, title: "Новые услуги", image: require("../assets/Reklama.png") },
-    { id: 6, title: "Регистрация!", image: require("../assets/Auca.jpg") },
+    { id: 3, name: t("Магазины"), image: require("../assets/store-alt-5.png") },
+    { id: 4, name: t("Кафе"), image: require("../assets/restaurant.png") },
+    {
+      id: 5,
+      name: t("Информация"),
+      image: require("../assets/square-info.png"),
+    },
   ];
 
   const tips = [
     {
-      title: "Экологические путешествия",
-      description:
-        "Внесите свой вклад для природы, используя меньше вещей в путешествии",
-      content:
-        "Экологические путешествия помогают сократить углеродный след. Используйте меньше пластика, выбирайте экологичные отели, поддерживайте местные инициативы. Например, выбирайте транспорт с меньшими выбросами CO2.",
+      title: t("Экологические путешествия"),
+      description: t(
+        "Внесите свой вклад для природы, используя меньше вещей в путешествии"
+      ),
+      content: t(
+        "Экологические путешествия помогают сократить углеродный след. Используйте меньше пластика, выбирайте экологичные отели, поддерживайте местные инициативы. Например, выбирайте транспорт с меньшими выбросами CO2."
+      ),
     },
     {
-      title: "Скидка 50% на билеты в Ош",
-      description:
-        "До 25 декабря действует скидка при покупке билетов эконом класса в Ош",
-      content:
-        "С 1 по 25 декабря действует скидка 50% на билеты в Ош. Это часть нашей программы поддержки экологичных путешествий. Планируйте поездки заранее и экономьте!",
+      title: t("Скидка 50% на билеты в Ош"),
+      description: t(
+        "До 25 декабря действует скидка при покупке билетов эконом класса в Ош"
+      ),
+      content: t(
+        "С 1 по 25 декабря действует скидка 50% на билеты в Ош. Это часть нашей программы поддержки экологичных путешествий. Планируйте поездки заранее и экономьте!"
+      ),
     },
     {
-      title: "Встречайте такси Манас",
-      description:
-        "В аэропорту «Манас» запустился сервис собственного таксопарка",
-      content:
-        "В аэропорту «Манас» появился новый сервис для путешественников и жителей города — собственный таксопарк. Теперь, вернувшись из поездки или прибыв в Бишкек, пассажиры смогут воспользоваться комфортными и безопасными поездками прямо из аэропорта.",
+      title: t("Встречайте такси Манас"),
+      description: t(
+        "В аэропорту «Манас» запустился сервис собственного таксопарка"
+      ),
+      content: t(
+        "В аэропорту «Манас» появился новый сервис для путешественников и жителей города — собственный таксопарк. Теперь, вернувшись из поездки или прибыв в Бишкек, пассажиры смогут воспользоваться комфортными и безопасными поездками прямо из аэропорта."
+      ),
     },
   ];
 
@@ -94,31 +90,8 @@ const HomeScreen = () => {
               source={require("../assets/Group.png")}
               style={styles.logo}
             />
-            <Text style={styles.title}>Добрый день!</Text>
+            <Text style={styles.title}>{t("Добрый день!")}</Text>
           </View>
-
-          {/* Сторис */}
-          <ScrollView
-            horizontal
-            contentContainerStyle={styles.storiesContainer}
-            showsHorizontalScrollIndicator={false}
-          >
-            {stories.map((story, index) => (
-              <TouchableOpacity
-                key={story.id}
-                onPress={() =>
-                  navigation.navigate("StoryScreen", {
-                    storyIndex: index,
-                    stories,
-                  })
-                }
-              >
-                <View style={styles.storyCircle}>
-                  <Image source={story.image} style={styles.storyImage} />
-                </View>
-              </TouchableOpacity>
-            ))}
-          </ScrollView>
 
           {/* Поиск */}
           <View style={styles.topSection}>
@@ -134,7 +107,7 @@ const HomeScreen = () => {
 
             <View style={styles.searchContainer}>
               <TextInput
-                placeholder="Искать рейс или услугу"
+                placeholder={t("Искать рейс или услугу")}
                 value={searchQuery}
                 onChangeText={setSearchQuery}
                 style={styles.searchInput}
@@ -159,11 +132,11 @@ const HomeScreen = () => {
                 key={service.id}
                 style={styles.serviceButton}
                 onPress={() => {
-                  if (service.name === "Такси и транспорт") {
+                  if (service.name === t("Такси и транспорт")) {
                     navigation.navigate("ТаксиТранспорт");
-                  } else if (service.name === "Аренда машин") {
+                  } else if (service.name === t("Аренда машин")) {
                     navigation.navigate("АрендаМашин");
-                  } else if (service.name === "Бронирование отеля") {
+                  } else if (service.name === t("Бронирование отеля")) {
                     navigation.navigate("БронированиеОтеля");
                   } else {
                     navigation.navigate("Все услуги");
@@ -185,7 +158,7 @@ const HomeScreen = () => {
               style={styles.allServicesButton}
               onPress={() => navigation.navigate("Все услуги")}
             >
-              <Text style={styles.allServicesText}>Все услуги</Text>
+              <Text style={styles.allServicesText}>{t("Все услуги")}</Text>
             </TouchableOpacity>
           </View>
 
@@ -235,29 +208,10 @@ const styles = StyleSheet.create({
     flex: 1,
     textAlign: "center",
   },
-  storiesContainer: {
-    flexDirection: "row",
-    marginTop: 20,
-    marginBottom: 20,
-  },
-  storyCircle: {
-    width: 70,
-    height: 70,
-    borderRadius: 35,
-    overflow: "hidden",
-    marginHorizontal: 5,
-    borderWidth: 2,
-    borderColor: "rgba(0, 150, 255, 0.8)",
-  },
-  storyImage: {
-    width: "100%",
-    height: "100%",
-    resizeMode: "cover",
-  },
   topSection: {
     flexDirection: "row",
     alignItems: "center",
-    marginVertical: 15,
+    marginVertical: 50,
   },
   notificationContainer: {
     width: 50,
@@ -290,7 +244,7 @@ const styles = StyleSheet.create({
   },
   services: {
     flexDirection: "row",
-    paddingVertical: 15,
+    paddingVertical: 20,
   },
   serviceButton: {
     alignItems: "center",
@@ -316,7 +270,7 @@ const styles = StyleSheet.create({
   centerButtonContainer: {
     alignItems: "center",
     marginTop: 10,
-    marginBottom: 25,
+    marginBottom: 40,
   },
   allServicesButton: {
     alignItems: "center",
@@ -329,7 +283,7 @@ const styles = StyleSheet.create({
   tipsContainer: {
     flexDirection: "row",
     paddingVertical: 10,
-    marginBottom: 70,
+    marginBottom: 90,
   },
   tipCard: {
     borderRadius: 15,

@@ -1,29 +1,29 @@
 import React, { useState } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Alert,
-} from "react-native";
+import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
+import { useTranslation } from "react-i18next";
 
 const CarRentalScreen = () => {
-  const [selectedClass, setSelectedClass] = useState("Эконом");
-  const [selectedTransmission, setSelectedTransmission] = useState("Автомат");
+  const { t } = useTranslation();
+  const [selectedClass, setSelectedClass] = useState(t("Эконом"));
+  const [selectedTransmission, setSelectedTransmission] = useState(
+    t("Автомат")
+  );
   const [priceRange, setPriceRange] = useState([1000, 10000]);
 
   const handleApplyFilters = () => {
     Alert.alert(
-      "Фильтры применены!",
-      `Класс: ${selectedClass}\nТрансмиссия: ${selectedTransmission}\nЦена: ${priceRange[0]} - ${priceRange[1]}`
+      t("Фильтры применены!"),
+      t(
+        `"Класс": ${selectedClass}\n"Трансмиссия": ${selectedTransmission}\n"Цена": ${priceRange[0]} - ${priceRange[1]}`
+      )
     );
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Аренда машин</Text>
+      <Text style={styles.header}>{t("Аренда машин")}</Text>
       <TouchableOpacity style={styles.button} onPress={handleApplyFilters}>
-        <Text style={styles.buttonText}>Применить фильтры</Text>
+        <Text style={styles.buttonText}>{t("Применить фильтры")}</Text>
       </TouchableOpacity>
     </View>
   );

@@ -8,8 +8,10 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { useAuth } from "../context/AuthContext";
+import { useTranslation } from "react-i18next";
 
 export default function MyTicketScreen() {
+  const { t } = useTranslation();
   const { user } = useAuth();
   const [ticket, setTicket] = useState(null);
 
@@ -19,8 +21,8 @@ export default function MyTicketScreen() {
         flightNumber: "MS123",
         departureTime: "2024-11-30 15:30",
         arrivalTime: "2024-11-30 17:45",
-        departureAirport: "Манас Международный Аэропорт",
-        arrivalAirport: "Шереметьево",
+        departureAirport: t("Манас Международный Аэропорт"),
+        arrivalAirport: t("Шереметьево"),
         gate: "A5",
         seat: "12A",
       });
@@ -32,38 +34,38 @@ export default function MyTicketScreen() {
   if (!ticket) {
     return (
       <View style={styles.container}>
-        <Text style={styles.loadingText}>Загружаем информацию о билете...</Text>
+        <Text style={styles.loadingText}>
+          {t("Загружаем информацию о билете...")}
+        </Text>
       </View>
     );
   }
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
-      <Text style={styles.header}>Мой билет</Text>
-
       <View style={styles.ticketCard}>
-        <Text style={styles.cardTitle}>Информация о рейсе</Text>
+        <Text style={styles.cardTitle}>{t("Информация о рейсе")}</Text>
 
         <View style={styles.ticketInfo}>
-          <Text style={styles.label}>Номер рейса:</Text>
+          <Text style={styles.label}>{t("Номер рейса")}:</Text>
           <Text style={styles.info}>{ticket.flightNumber}</Text>
 
-          <Text style={styles.label}>Дата и время вылета:</Text>
+          <Text style={styles.label}>{t("Дата и время вылета")}:</Text>
           <Text style={styles.info}>{ticket.departureTime}</Text>
 
-          <Text style={styles.label}>Дата и время прилета:</Text>
+          <Text style={styles.label}>{t("Дата и время прилета")}:</Text>
           <Text style={styles.info}>{ticket.arrivalTime}</Text>
 
-          <Text style={styles.label}>Аэропорт вылета:</Text>
+          <Text style={styles.label}>{t("Аэропорт вылета")}:</Text>
           <Text style={styles.info}>{ticket.departureAirport}</Text>
 
-          <Text style={styles.label}>Аэропорт прилета:</Text>
+          <Text style={styles.label}>{t("Аэропорт прилета")}:</Text>
           <Text style={styles.info}>{ticket.arrivalAirport}</Text>
 
-          <Text style={styles.label}>Выход:</Text>
+          <Text style={styles.label}>{t("Выход")}:</Text>
           <Text style={styles.info}>{ticket.gate}</Text>
 
-          <Text style={styles.label}>Место:</Text>
+          <Text style={styles.label}>{t("Место")}:</Text>
           <Text style={styles.info}>{ticket.seat}</Text>
         </View>
       </View>
@@ -71,9 +73,9 @@ export default function MyTicketScreen() {
       <View style={styles.buttonContainer}>
         <TouchableOpacity
           style={styles.button}
-          onPress={() => alert("Билет отменен")}
+          onPress={() => alert(t("Билет отменен"))}
         >
-          <Text style={styles.buttonText}>Отменить билет</Text>
+          <Text style={styles.buttonText}>{t("Отменить билет")}</Text>
         </TouchableOpacity>
       </View>
     </ScrollView>

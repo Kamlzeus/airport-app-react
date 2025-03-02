@@ -8,8 +8,10 @@ import {
   TouchableOpacity,
   Alert,
 } from "react-native";
+import { useTranslation } from "react-i18next";
 
 const HotelBookingScreen = ({ navigation }) => {
+  const { t } = useTranslation();
   const [checkInDate, setCheckInDate] = useState("");
   const [checkOutDate, setCheckOutDate] = useState("");
   const [country, setCountry] = useState("");
@@ -36,13 +38,15 @@ const HotelBookingScreen = ({ navigation }) => {
 
   const handleSearch = () => {
     if (!checkInDate || !checkOutDate || !country) {
-      Alert.alert("Ошибка", "Пожалуйста, заполните все поля для поиска.");
+      Alert.alert(t("Ошибка", "Пожалуйста, заполните все поля для поиска."));
       return;
     }
 
     Alert.alert(
-      "Поиск выполнен",
-      `Дата заезда: ${checkInDate}\nДата выезда: ${checkOutDate}\nСтрана: ${country}`
+      t("Поиск выполнен"),
+      t(
+        `'Дата заезда': ${checkInDate}\n'Дата выезда': ${checkOutDate}\n"Страна": ${country}`
+      )
     );
     // Здесь вы можете добавить логику фильтрации отелей
   };
@@ -64,30 +68,30 @@ const HotelBookingScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Бронирование отеля</Text>
+      <Text style={styles.header}>{t("Бронирование отеля")}</Text>
 
       {/* Фильтры */}
       <View style={styles.filterContainer}>
         <TextInput
           style={styles.input}
-          placeholder="Дата заезда (YYYY-MM-DD)"
+          placeholder={t("Дата заезда (YYYY-MM-DD)")}
           value={checkInDate}
           onChangeText={setCheckInDate}
         />
         <TextInput
           style={styles.input}
-          placeholder="Дата выезда (YYYY-MM-DD)"
+          placeholder={t("Дата выезда (YYYY-MM-DD)")}
           value={checkOutDate}
           onChangeText={setCheckOutDate}
         />
         <TextInput
           style={styles.input}
-          placeholder="Страна/Город"
+          placeholder={t("Страна/Город")}
           value={country}
           onChangeText={setCountry}
         />
         <TouchableOpacity style={styles.searchButton} onPress={handleSearch}>
-          <Text style={styles.searchButtonText}>Найти отели</Text>
+          <Text style={styles.searchButtonText}>{t("Найти отели")}</Text>
         </TouchableOpacity>
       </View>
 

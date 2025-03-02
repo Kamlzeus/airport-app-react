@@ -1,22 +1,30 @@
 // screens/HotelDetailsScreen.js
 import React from "react";
 import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { useTranslation } from "react-i18next";
 
 const HotelDetailsScreen = ({ route, navigation }) => {
+  const { t } = useTranslation();
   const { hotel } = route.params;
 
   return (
     <View style={styles.container}>
       <Text style={styles.header}>{hotel.name}</Text>
       <Text style={styles.description}>{hotel.description}</Text>
-      <Text style={styles.details}>Страна: {hotel.country}</Text>
-      <Text style={styles.details}>Краткое описание: {hotel.description}</Text>
+      <Text style={styles.details}>
+        {t("Страна")}: {hotel.country}
+      </Text>
+      <Text style={styles.details}>
+        {t("Краткое описание")}: {hotel.description}
+      </Text>
 
       <TouchableOpacity
         style={styles.bookButton}
         onPress={() => navigation.navigate("BookingScreen", { hotel })}
       >
-        <Text style={styles.bookButtonText}>Выбрать даты бронирования</Text>
+        <Text style={styles.bookButtonText}>
+          {t("Выбрать даты бронирования")}
+        </Text>
       </TouchableOpacity>
     </View>
   );

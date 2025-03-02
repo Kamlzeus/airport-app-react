@@ -6,14 +6,13 @@ import { Ionicons, FontAwesome5 } from "@expo/vector-icons";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import HomeScreen from "./screens/HomeScreen";
 import MapScreen from "./screens/MapScreen";
-import FlightsScreen from "./screens/FlightsScreen";
+import FoodDeliveryScreen from "./screens/FoodDeliveryScreen";
 import QrScreen from "./screens/QrScreen";
 import TicketsScreen from "./screens/TicketsScreen";
 import NotificationSettingsScreen from "./screens/NotificationSettingsScreen";
 import AuthScreen from "./screens/AuthScreen";
 import AllServicesScreen from "./screens/AllServicesScreen";
 import ProfileScreen from "./screens/ProfileScreen";
-import CallEmployeeScreen from "./screens/CallEmployeeScreen";
 import MyTicketScreen from "./screens/MyTicketScreen";
 import TicketPurchaseScreen from "./screens/TicketPurchaseScreen";
 import StoryScreen from "./screens/StoryScreen";
@@ -24,6 +23,10 @@ import HotelBookingScreen from "./screens/HotelBookingScreen";
 import EcoTravelScreen from "./screens/EcoTravelScreen";
 import HotelListScreen from "./screens/HotelListScreen";
 import HotelDetailsScreen from "./screens/HotelDetailsScreen";
+import "./i18n"; // Подключаем локализацию
+import { useTranslation } from "react-i18next";
+import LanguageSwitcher from "./LanguageSwitcher";
+import { resources } from "./i18n"; // Импортируем переводы
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -46,7 +49,6 @@ function SettingsDrawer() {
     <Drawer.Navigator>
       <Drawer.Screen name="Профиль" component={ProfileScreen} />
       <Drawer.Screen name="Мой билет" component={TicketsScreen} />
-      <Drawer.Screen name="Вызов сотрудника" component={CallEmployeeScreen} />
       <Drawer.Screen
         name="Уведомления"
         component={NotificationSettingsScreen}
@@ -56,47 +58,61 @@ function SettingsDrawer() {
 }
 
 function MainTabs() {
+  const { t } = useTranslation();
+
   return (
     <Tab.Navigator
-      screenOptions={({ route }) => ({
-        tabBarIcon: ({ color, size }) => {
-          let iconName;
-          if (route.name === "Главная") {
-            iconName = "home-outline";
-            return <Ionicons name={iconName} size={size} color={color} />;
-          } else if (route.name === "Карта") {
-            iconName = "map-outline";
-            return <Ionicons name={iconName} size={size} color={color} />;
-          } else if (route.name === "Рейсы") {
-            iconName = "airplane-outline";
-            return <Ionicons name={iconName} size={size} color={color} />;
-          } else if (route.name === "QR") {
-            iconName = "qr-code-outline";
-            return <Ionicons name={iconName} size={size} color={color} />;
-          } else if (route.name === "Билеты") {
-            iconName = "ticket-alt";
-            return <FontAwesome5 name={iconName} size={size} color={color} />;
-          }
-        },
-        tabBarActiveTintColor: "tomato",
-        tabBarInactiveTintColor: "gray",
-        tabBarLabelStyle: {
-          fontSize: 12,
-          textAlign: "center",
-          marginBottom: 4,
-        },
-        tabBarStyle: {
-          height: 80,
-          alignItems: "center",
-          justifyContent: "center",
-          paddingBottom: 10,
-        },
-      })}
+      screenOptions={({ route }) => {
+        // Находим ключ из русской локализации
+        const routeKey = Object.keys(resources["ru"].translation).find(
+          (key) => t(key) === route.name
+        );
+
+        return {
+          tabBarIcon: ({ color, size }) => {
+            let iconName;
+            switch (routeKey) {
+              case "Главная":
+                iconName = "home-outline";
+                return <Ionicons name={iconName} size={size} color={color} />;
+              case "Карта":
+                iconName = "map-outline";
+                return <Ionicons name={iconName} size={size} color={color} />;
+              case "Заказ Еды":
+                iconName = "fast-food-outline";
+                return <Ionicons name={iconName} size={size} color={color} />;
+              case "QR":
+                iconName = "qr-code-outline";
+                return <Ionicons name={iconName} size={size} color={color} />;
+              case "Билеты":
+                iconName = "ticket-alt";
+                return (
+                  <FontAwesome5 name={iconName} size={size} color={color} />
+                );
+              default:
+                return null;
+            }
+          },
+          tabBarActiveTintColor: "tomato",
+          tabBarInactiveTintColor: "gray",
+          tabBarLabelStyle: {
+            fontSize: 12,
+            textAlign: "center",
+            marginBottom: 4,
+          },
+          tabBarStyle: {
+            height: 80,
+            alignItems: "center",
+            justifyContent: "center",
+            paddingBottom: 10,
+          },
+        };
+      }}
     >
-      <Tab.Screen name="QR" component={QrScreen} />
-      <Tab.Screen name="Рейсы" component={FlightsScreen} />
+      <Tab.Screen name={t("QR")} component={QrScreen} />
+      <Tab.Screen name={t("Заказ Еды")} component={FoodDeliveryScreen} />
       <Tab.Screen
-        name="Главная"
+        name={t("Главная")}
         component={HomeScreen}
         options={({ navigation }) => ({
           headerLeft: () => (
@@ -108,12 +124,13 @@ function MainTabs() {
               onPress={() => navigation.openDrawer()} // Открытие бокового меню
             />
           ),
-          headerTitle: "Главная",
+          headerRight: () => <LanguageSwitcher />,
+          headerTitle: t("Главная"),
           headerTitleAlign: "center", // Центрирование заголовка
         })}
       />
-      <Tab.Screen name="Карта" component={MapScreen} />
-      <Tab.Screen name="Билеты" component={TicketsScreen} />
+      <Tab.Screen name={t("Карта")} component={MapScreen} />
+      <Tab.Screen name={t("Билеты")} component={TicketsScreen} />
     </Tab.Navigator>
   );
 }
@@ -124,7 +141,7 @@ function MainStack() {
     <Stack.Navigator>
       {isLoggedIn ? (
         <Stack.Screen
-          name="MainTabs"
+          name="Назад"
           component={MainTabs}
           options={{ headerShown: false }}
         />
@@ -154,7 +171,7 @@ function MainStack() {
       <Stack.Screen
         name="Все услуги"
         component={AllServicesScreen}
-        options={{ headerShown: false }}
+        options={{ title: "Все услуги" }}
       />
       <Stack.Screen
         name="EcoTravel"
@@ -191,34 +208,60 @@ function MainStack() {
 }
 
 export default function App() {
+  const { t } = useTranslation();
   return (
     <AuthProvider>
       <NavigationContainer>
         <Drawer.Navigator>
           <Drawer.Screen
-            name="Главная"
+            name={t("Главная")}
             component={MainStack}
             options={{ headerShown: false }}
           />
           <Drawer.Screen
-            name="Профиль"
+            name={t("Профиль")}
             component={ProfileScreen}
-            options={{ headerShown: false }}
+            options={({ navigation }) => ({
+              headerLeft: () => (
+                <Ionicons
+                  name="menu-outline"
+                  size={24}
+                  color="black"
+                  style={{ marginLeft: 15 }}
+                  onPress={() => navigation.openDrawer()} // Открытие бокового меню
+                />
+              ),
+            })}
           />
           <Drawer.Screen
-            name="Мой билет"
+            name={t("Мой билет")}
             component={MyTicketScreen}
-            options={{ headerShown: false }}
+            options={({ navigation }) => ({
+              headerLeft: () => (
+                <Ionicons
+                  name="menu-outline"
+                  size={24}
+                  color="black"
+                  style={{ marginLeft: 15 }}
+                  onPress={() => navigation.openDrawer()} // Открытие бокового меню
+                />
+              ),
+            })}
           />
           <Drawer.Screen
-            name="Вызов сотрудника"
-            component={CallEmployeeScreen}
-            options={{ headerShown: false }}
-          />
-          <Drawer.Screen
-            name="Уведомления"
+            name={t("Уведомления")}
             component={NotificationSettingsScreen}
-            options={{ headerShown: false }}
+            options={({ navigation }) => ({
+              headerLeft: () => (
+                <Ionicons
+                  name="menu-outline"
+                  size={24}
+                  color="black"
+                  style={{ marginLeft: 15 }}
+                  onPress={() => navigation.openDrawer()} // Открытие бокового меню
+                />
+              ),
+            })}
           />
         </Drawer.Navigator>
       </NavigationContainer>

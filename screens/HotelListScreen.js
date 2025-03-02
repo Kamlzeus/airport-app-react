@@ -8,6 +8,7 @@ import {
   FlatList,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
+import { useTranslation } from "react-i18next";
 
 const hotels = [
   {
@@ -61,6 +62,7 @@ const hotels = [
 ];
 
 const HotelListScreen = () => {
+  const { t } = useTranslation();
   const navigation = useNavigation();
   const [filter, setFilter] = useState("");
   const [filteredHotels, setFilteredHotels] = useState(hotels);
@@ -77,15 +79,15 @@ const HotelListScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Фильтр отелей</Text>
+      <Text style={styles.header}>{t("Фильтр отелей")}</Text>
       <TextInput
         style={styles.input}
-        placeholder="Введите название, описание или страну"
+        placeholder={t("Введите название, описание или страну")}
         value={filter}
         onChangeText={setFilter}
       />
       <TouchableOpacity style={styles.button} onPress={applyFilter}>
-        <Text style={styles.buttonText}>Применить фильтр</Text>
+        <Text style={styles.buttonText}>{t("Применить фильтр")}</Text>
       </TouchableOpacity>
 
       <FlatList
@@ -101,7 +103,7 @@ const HotelListScreen = () => {
           </TouchableOpacity>
         )}
         ListEmptyComponent={
-          <Text style={styles.empty}>Нет доступных отелей</Text>
+          <Text style={styles.empty}>{t("Нет доступных отелей")}</Text>
         }
       />
     </View>

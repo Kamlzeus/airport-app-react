@@ -6,8 +6,10 @@ import {
   TouchableOpacity,
   StyleSheet,
 } from "react-native";
+import { useTranslation } from "react-i18next";
 
 const TicketsScreen = ({ navigation }) => {
+  const { t } = useTranslation();
   const [flights, setFlights] = useState([
     {
       id: 1,
@@ -64,7 +66,6 @@ const TicketsScreen = ({ navigation }) => {
       origin: "Boston",
       destination: "Denver",
       time: "20:10:00",
-
     },
     {
       id: 8,
@@ -83,17 +84,27 @@ const TicketsScreen = ({ navigation }) => {
         index % 2 === 0 ? styles.evenRow : styles.oddRow,
       ]}
     >
-      <Text style={styles.flightText}>Авиалиния: {item.airline}</Text>
-      <Text style={styles.flightText}>Рейс: {item.flight_code}</Text>
-      <Text style={styles.flightText}>Откуда: {item.origin}</Text>
-      <Text style={styles.flightText}>Куда: {item.destination}</Text>
-      <Text style={styles.flightText}>Время: {item.time}</Text>
+      <Text style={styles.flightText}>
+        {t("Авиалиния")}: {item.airline}
+      </Text>
+      <Text style={styles.flightText}>
+        {t("Рейс")}: {item.flight_code}
+      </Text>
+      <Text style={styles.flightText}>
+        {t("Откуда")}: {item.origin}
+      </Text>
+      <Text style={styles.flightText}>
+        {t("Куда")}: {item.destination}
+      </Text>
+      <Text style={styles.flightText}>
+        {t("Время")}: {item.time}
+      </Text>
 
       <TouchableOpacity
         style={styles.buyButton}
         onPress={() => handleBuyTicket(item)}
       >
-        <Text style={styles.buyButtonText}>Купить билет</Text>
+        <Text style={styles.buyButtonText}>{t("Купить билет")}</Text>
       </TouchableOpacity>
     </View>
   );
@@ -117,7 +128,7 @@ const TicketsScreen = ({ navigation }) => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.header}>Доступные билеты</Text>
+      <Text style={styles.header}>{t("Доступные билеты")}</Text>
       <FlatList
         data={flights}
         keyExtractor={(item) => item.id.toString()}

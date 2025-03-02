@@ -1,45 +1,68 @@
-import React, { useState } from "react";
-import { View, Text, Button, StyleSheet } from "react-native";
+import React from "react";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
 import QRCode from "react-native-qrcode-svg";
+import { useTranslation } from "react-i18next";
 
-const QrScreen = () => {
-  const [showQRCode, setShowQRCode] = useState(false);
+export default function QRCodeGenerator() {
+  const { t } = useTranslation();
+  const qrValue = t("сканирования ~");
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>QR Code</Text>
-
-      {showQRCode ? (
-        <View style={styles.qrContainer}>
-          <QRCode value="Ваш текст или данные для QR-кода" size={200} />
-          <Button title="Скрыть QR-код" onPress={() => setShowQRCode(false)} />
-        </View>
-      ) : (
-        <Button
-          title="Показать мой QR-код"
-          onPress={() => setShowQRCode(true)}
+      <Text style={styles.header}>{t("Ваш QR-код")}</Text>
+      <View style={styles.qrContainer}>
+        <QRCode
+          value={qrValue}
+          size={250}
+          color="#1e90ff"
+          backgroundColor="#fff"
         />
-      )}
+      </View>
+      <TouchableOpacity
+        style={styles.button}
+        onPress={() => alert(t(`'QR-код для' ${qrValue}`))}
+      >
+        <Text style={styles.buttonText}>{t("Показать данные")}</Text>
+      </TouchableOpacity>
     </View>
   );
-};
+}
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "#f4f4f8",
+    alignItems: "center",
+    backgroundColor: "#f4f4f4",
+    padding: 20,
   },
-  title: {
+  header: {
     fontSize: 24,
-    marginBottom: 20,
     fontWeight: "bold",
+    marginBottom: 20,
+    color: "#333",
   },
   qrContainer: {
-    alignItems: "center",
-    marginBottom: 20,
+    padding: 20,
+    backgroundColor: "#fff",
+    borderRadius: 20,
+    elevation: 5,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 5,
+    marginBottom: 30,
+  },
+  button: {
+    backgroundColor: "#1e90ff",
+    paddingVertical: 15,
+    paddingHorizontal: 40,
+    borderRadius: 30,
+    elevation: 3,
+  },
+  buttonText: {
+    color: "#fff",
+    fontSize: 18,
+    fontWeight: "bold",
   },
 });
-
-export default QrScreen;
