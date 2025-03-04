@@ -6,7 +6,6 @@ import { Ionicons, FontAwesome5 } from "@expo/vector-icons";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import HomeScreen from "./screens/HomeScreen";
 import MapScreen from "./screens/MapScreen";
-import FoodDeliveryScreen from "./screens/FoodDeliveryScreen";
 import QrScreen from "./screens/QrScreen";
 import TicketsScreen from "./screens/TicketsScreen";
 import NotificationSettingsScreen from "./screens/NotificationSettingsScreen";
@@ -23,6 +22,8 @@ import HotelBookingScreen from "./screens/HotelBookingScreen";
 import EcoTravelScreen from "./screens/EcoTravelScreen";
 import HotelListScreen from "./screens/HotelListScreen";
 import HotelDetailsScreen from "./screens/HotelDetailsScreen";
+import ShopsScreen from "./screens/ShopsScreen";
+import CafesScreen from "./screens/CafesScreen";
 import "./i18n"; // Подключаем локализацию
 import { useTranslation } from "react-i18next";
 import LanguageSwitcher from "./LanguageSwitcher";
@@ -78,11 +79,11 @@ function MainTabs() {
               case "Карта":
                 iconName = "map-outline";
                 return <Ionicons name={iconName} size={size} color={color} />;
-              case "Заказ Еды":
-                iconName = "fast-food-outline";
+              case "Такси":
+                iconName = "car-outline";
                 return <Ionicons name={iconName} size={size} color={color} />;
-              case "QR":
-                iconName = "qr-code-outline";
+              case "ChatBot":
+                iconName = "chatbubbles-outline";
                 return <Ionicons name={iconName} size={size} color={color} />;
               case "Билеты":
                 iconName = "ticket-alt";
@@ -109,12 +110,13 @@ function MainTabs() {
         };
       }}
     >
-      <Tab.Screen name={t("QR")} component={QrScreen} />
-      <Tab.Screen name={t("Заказ Еды")} component={FoodDeliveryScreen} />
+      <Tab.Screen name={t("ChatBot")} component={QrScreen} />
+      <Tab.Screen name={t("Билеты")} component={TicketsScreen} />
       <Tab.Screen
         name={t("Главная")}
         component={HomeScreen}
         options={({ navigation }) => ({
+          headerShown: false,
           headerLeft: () => (
             <Ionicons
               name="menu-outline"
@@ -129,8 +131,8 @@ function MainTabs() {
           headerTitleAlign: "center", // Центрирование заголовка
         })}
       />
+      <Tab.Screen name={t("Такси")} component={TaxiTransportScreen} />
       <Tab.Screen name={t("Карта")} component={MapScreen} />
-      <Tab.Screen name={t("Билеты")} component={TicketsScreen} />
     </Tab.Navigator>
   );
 }
@@ -179,11 +181,6 @@ function MainStack() {
         options={{ title: "Экологические путешествия" }}
       />
       <Stack.Screen
-        name="ТаксиТранспорт"
-        component={TaxiTransportScreen}
-        options={{ title: "Такси и транспорт" }}
-      />
-      <Stack.Screen
         name="АрендаМашин"
         component={CarRentalScreen}
         options={{ title: "Аренда машин" }}
@@ -202,6 +199,16 @@ function MainStack() {
         name="BookingScreen"
         component={HotelBookingScreen} // Экран бронирования
         options={{ title: "Бронирование" }}
+      />
+      <Stack.Screen
+        name="ShopsScreen"
+        component={ShopsScreen}
+        options={{ title: "Магазины" }}
+      />
+      <Stack.Screen
+        name="CafesScreen"
+        component={CafesScreen}
+        options={{ title: "Кафе" }}
       />
     </Stack.Navigator>
   );

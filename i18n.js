@@ -6,6 +6,13 @@ export const resources = {
   en: {
     translation: {
       Главная: "Home Page",
+      Кофейня: "Coffee shop",
+      Кафе: "Cafe",
+      "Долина вкуса": "Valley of Taste",
+      "Поиск кафе...": "Search for cafes...",
+      Ювелирка: "Jewelry",
+      Сувениры: "Souvenir",
+      "Поиск магазинов...": "Search for store",
       Профиль: "Profile",
       "Ваш билет успешно куплен!":
         "Your ticket has been successfully purchased!",
@@ -124,7 +131,7 @@ export const resources = {
       "В аэропорту «Манас» появился новый сервис для путешественников и жителей города — собственный таксопарк. Теперь, вернувшись из поездки или прибыв в Бишкек, пассажиры смогут воспользоваться комфортными и безопасными поездками прямо из аэропорта.":
         "A new service for travelers and city residents has appeared at Manas Airport — its own taxi fleet. Now, after returning from a trip or arriving in Bishkek, passengers can use comfortable and safe rides directly from the airport.",
       "Добрый день!": "Good afternoon!",
-      "Искать рейс или услугу": "Search for a flight or service",
+      "Искать услугу": "Search for a service",
       "Аренда машин": "Car Rental",
       "Бронирование отеля": "Hotel Booking",
       "Все услуги": "All Services",
@@ -168,6 +175,14 @@ export const resources = {
   },
   ru: {
     translation: {
+      "Искать услугу": "Искать услугу",
+      Кофейня: "Кофейня",
+      Кафе: "Кафе",
+      "Долина вкуса": "Долина вкуса",
+      "Поиск кафе...": "Поиск кафе...",
+      Ювелирка: "Ювелирка",
+      Сувениры: "Сувениры",
+      "Поиск магазинов...": "Поиск магазинов...",
       Главная: "Главная",
       QR: "QR",
       Профиль: "Профиль",

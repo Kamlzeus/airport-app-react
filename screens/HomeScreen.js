@@ -15,6 +15,7 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useNavigation } from "@react-navigation/native";
 import { Linking } from "react-native";
 import { useTranslation } from "react-i18next";
+import LanguageSwitcher from "../LanguageSwitcher";
 
 const HomeScreen = () => {
   const { t } = useTranslation();
@@ -23,12 +24,17 @@ const HomeScreen = () => {
 
   const services = [
     {
-      id: 2,
-      name: t("Такси и транспорт"),
-      image: require("../assets/taxi-bus.png"),
+      id: 3,
+      name: t("Магазины"),
+      image: require("../assets/store-alt-5.png"),
+      screen: "ShopsScreen",
     },
-    { id: 3, name: t("Магазины"), image: require("../assets/store-alt-5.png") },
-    { id: 4, name: t("Кафе"), image: require("../assets/restaurant.png") },
+    {
+      id: 4,
+      name: t("Кафе"),
+      image: require("../assets/restaurant.png"),
+      screen: "CafesScreen",
+    },
     {
       id: 5,
       name: t("Информация"),
@@ -85,6 +91,13 @@ const HomeScreen = () => {
           style={styles.gradient}
         >
           {/* Заголовок */}
+          <View style={styles.customHeader}>
+            <TouchableOpacity onPress={() => navigation.openDrawer()}>
+              <Ionicons name="menu-outline" size={30} color="black" />
+            </TouchableOpacity>
+            <LanguageSwitcher />
+          </View>
+
           <View style={styles.header}>
             <Image
               source={require("../assets/Group.png")}
@@ -107,7 +120,7 @@ const HomeScreen = () => {
 
             <View style={styles.searchContainer}>
               <TextInput
-                placeholder={t("Искать рейс или услугу")}
+                placeholder={t("Искать услугу")}
                 value={searchQuery}
                 onChangeText={setSearchQuery}
                 style={styles.searchInput}
@@ -132,7 +145,11 @@ const HomeScreen = () => {
                 key={service.id}
                 style={styles.serviceButton}
                 onPress={() => {
-                  if (service.name === t("Такси и транспорт")) {
+                  if (service.name === t("Магазины")) {
+                    navigation.navigate("ShopsScreen");
+                  } else if (service.name === t("Кафе")) {
+                    navigation.navigate("CafesScreen");
+                  } else if (service.name === t("Такси и транспорт")) {
                     navigation.navigate("ТаксиТранспорт");
                   } else if (service.name === t("Аренда машин")) {
                     navigation.navigate("АрендаМашин");
@@ -199,9 +216,21 @@ const HomeScreen = () => {
 const styles = StyleSheet.create({
   container: { flex: 1 },
   imageBackground: { flex: 1, justifyContent: "center" },
-  gradient: { flex: 1, paddingHorizontal: 20, paddingTop: 40 },
-  header: { flexDirection: "row", alignItems: "center", paddingHorizontal: 30 },
+  gradient: { flex: 1, paddingTop: 40 },
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingHorizontal: 50,
+    paddingVertical: 25,
+  },
   logo: { width: 59, height: 59, borderRadius: 25, marginRight: 2 },
+  customHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between", // Размещаем элементы по краям
+    alignItems: "center",
+    paddingHorizontal: 20,
+    paddingTop: 20,
+  },
   title: {
     fontSize: 25,
     fontWeight: "bold",
@@ -220,19 +249,22 @@ const styles = StyleSheet.create({
     backgroundColor: "#fff",
     justifyContent: "center",
     alignItems: "center",
-    marginRight: 10,
+    marginLeft: 20,
+    marginRight: 20,
   },
   notificationIcon: {
     width: 25,
     height: 25,
   },
   searchContainer: {
+    maxWidth: 330,
     flex: 1,
     flexDirection: "row",
     alignItems: "center",
     backgroundColor: "white",
-    borderRadius: 25,
-    paddingHorizontal: 15,
+    borderRadius: 20,
+    paddingHorizontal: 20,
+    alignSelf: "center",
   },
   searchInput: {
     flex: 1,
@@ -254,7 +286,7 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     width: 130,
     height: 130,
-    marginHorizontal: 10,
+    marginHorizontal: 8.5,
   },
   serviceIcon: {
     width: 50,

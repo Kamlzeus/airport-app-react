@@ -1,98 +1,120 @@
 import React, { useState } from "react";
-import { View, Text, StyleSheet, TouchableOpacity, Alert } from "react-native";
+import {
+  View,
+  Text,
+  TouchableOpacity,
+  StyleSheet,
+  Alert,
+  ImageBackground,
+} from "react-native";
 import { useTranslation } from "react-i18next";
+import { LinearGradient } from "expo-linear-gradient";
 
 const TicketPurchaseScreen = ({ route, navigation }) => {
-  const { purchasedFlight } = route.params; // Получаем данные рейса
+  const { purchasedFlight } = route.params;
   const { t } = useTranslation();
-
   const [isPurchasing, setIsPurchasing] = useState(false);
 
   const handlePurchase = () => {
     setIsPurchasing(true);
 
-    // Имитация процесса покупки
     setTimeout(() => {
       setIsPurchasing(false);
       Alert.alert(t("Ваш билет успешно куплен!"));
-      navigation.navigate("Главная"); // Переход на страницу профиля после покупки
+      navigation.navigate("Главная");
     }, 2000);
   };
 
   return (
-    <View style={styles.container}>
-      <Text style={styles.header}>{t("Подтверждение покупки билета")}</Text>
-      <View style={styles.flightCard}>
-        <Text style={styles.flightText}>
-          {t("Авиалиния")}: {purchasedFlight.airline}
-        </Text>
-        <Text style={styles.flightText}>
-          {t("Рейс")}: {purchasedFlight.flightNumber}
-        </Text>
-        <Text style={styles.flightText}>
-          {t("Откуда")}: {purchasedFlight.origin}
-        </Text>
-        <Text style={styles.flightText}>
-          {t("Куда")}: {purchasedFlight.destination}
-        </Text>
-        <Text style={styles.flightText}>
-          {t("Дата")}: {purchasedFlight.date}
-        </Text>
-        <Text style={styles.flightText}>
-          {t("Время")}: {purchasedFlight.time}
-        </Text>
-      </View>
-      <TouchableOpacity
-        style={styles.buyButton}
-        onPress={handlePurchase}
-        disabled={isPurchasing}
+    <ImageBackground
+      source={{
+        uri: "https://triptokyrgyzstan.com/sites/default/files/styles/hero/public/images/2019-04/slide-1960x857-07.jpg.webp?itok=PMx4TeLB",
+      }}
+      style={styles.background}
+    >
+      <LinearGradient
+        colors={["rgba(0, 150, 255, 0.6)", "rgba(255, 255, 255, 1)"]}
+        style={styles.gradient}
       >
-        <Text style={styles.buyButtonText}>
-          {isPurchasing ? t("Покупка...") : t("Купить билет")}
-        </Text>
-      </TouchableOpacity>
-    </View>
+        <View style={styles.container}>
+          <Text style={styles.header}>{t("Подтверждение покупки билета")}</Text>
+          <View style={styles.flightCard}>
+            <Text style={styles.flightText}>
+              {t("Откуда")}: {purchasedFlight.from}
+            </Text>
+            <Text style={styles.flightText}>
+              {t("Куда")}: {purchasedFlight.to}
+            </Text>
+            <Text style={styles.flightText}>
+              {t("Дата")}: {purchasedFlight.date}
+            </Text>
+            <Text style={styles.flightText}>
+              {t("Класс")}: {purchasedFlight.class}
+            </Text>
+            <Text style={styles.flightText}>
+              {t("Цена")}: {purchasedFlight.price}
+            </Text>
+          </View>
+          <TouchableOpacity
+            style={styles.buyButton}
+            onPress={handlePurchase}
+            disabled={isPurchasing}
+          >
+            <Text style={styles.buyButtonText}>
+              {isPurchasing ? t("Покупка...") : t("Купить билет")}
+            </Text>
+          </TouchableOpacity>
+        </View>
+      </LinearGradient>
+    </ImageBackground>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
+  background: {
     flex: 1,
-    backgroundColor: "#f8f9fa",
-    padding: 16,
+    justifyContent: "center",
+  },
+  gradient: {
+    flex: 1,
+    paddingHorizontal: 20,
+    justifyContent: "center",
+  },
+  container: {
+    alignItems: "center",
   },
   header: {
     fontSize: 24,
     fontWeight: "bold",
-    marginBottom: 16,
     textAlign: "center",
+    marginBottom: 20,
   },
   flightCard: {
-    backgroundColor: "#fff",
-    borderRadius: 8,
-    padding: 16,
-    marginBottom: 16,
+    backgroundColor: "white",
+    borderRadius: 20,
+    padding: 20,
+    width: "90%",
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 2,
+    marginBottom: 30,
   },
   flightText: {
     fontSize: 16,
-    marginBottom: 4,
+    margin: 5,
   },
   buyButton: {
     backgroundColor: "#007AFF",
-    borderRadius: 4,
-    padding: 10,
+    padding: 15,
+    borderRadius: 15,
+    width: "90%",
     alignItems: "center",
-    marginTop: 8,
   },
   buyButtonText: {
-    color: "#fff",
-    fontWeight: "bold",
-    fontSize: 16,
+    color: "white",
+    fontSize: 18,
   },
 });
 
