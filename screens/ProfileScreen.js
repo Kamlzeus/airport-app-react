@@ -2,127 +2,135 @@ import React, { useState } from "react";
 import {
   View,
   Text,
-  TextInput,
-  Button,
-  StyleSheet,
   TouchableOpacity,
+  Image,
+  StyleSheet,
+  ScrollView,
+  ImageBackground,
 } from "react-native";
-import { Ionicons } from "@expo/vector-icons";
-import { useAuth } from "../context/AuthContext"; // Для работы с аутентификацией
-import { useTranslation } from "react-i18next";
+import { useNavigation } from "@react-navigation/native";
+import { Ionicons, MaterialIcons } from "@expo/vector-icons";
+import { LinearGradient } from "expo-linear-gradient";
 
-const ProfileScreen = () => {
-  const { t } = useTranslation();
-  const { user, logout } = useAuth(); // Доступ к информации о пользователе и функции выхода
-  const [isEditing, setIsEditing] = useState(false); // Состояние редактирования
-  const [name, setName] = useState(user?.name || "");
-  const [email, setEmail] = useState(user?.email || "");
-  const [password, setPassword] = useState(""); // Для пароля
+const MyProfileScreen = () => {
+  const navigation = useNavigation();
 
-  const handleSave = () => {
-    // Здесь будет логика для сохранения изменений
-    // Например, обновление данных в контексте или в базе данных
-    setIsEditing(false);
-  };
-
-  const handleLogout = () => {
-    logout();
-  };
+  // Данные пользователя
+  const [user] = useState({
+    avatar: "https://www.w3schools.com/w3images/avatar2.png",
+    name: "Иван Петров",
+    email: "ivan.petrov@example.com",
+    balance: "1 250$",
+    bonuses: "250 Бонусов",
+  });
 
   return (
-    <View style={styles.container}>
-      <View style={styles.header}>
-        <Text style={styles.username}>{name || ""}</Text>
-        <Ionicons name="person-circle-outline" size={100} color="gray" />
-      </View>
+    <ImageBackground
+      source={{
+        uri: "https://triptokyrgyzstan.com/sites/default/files/styles/hero/public/images/2019-04/slide-1960x857-07.jpg.webp?itok=PMx4TeLB",
+      }}
+      style={styles.imageBackground}
+    >
+      <LinearGradient
+        colors={["rgba(0, 150, 255, 0.5)", "rgba(255, 255, 255, 1)"]}
+        style={styles.gradient}
+      >
+        <ScrollView contentContainerStyle={styles.container}>
+          {/* Профиль */}
+          <View style={styles.profileCard}>
+            <Image source={{ uri: user.avatar }} style={styles.avatar} />
+            <Text style={styles.name}>{user.name}</Text>
+            <Text style={styles.email}>{user.email}</Text>
 
-      <View style={styles.infoSection}>
-        <Text style={styles.label}>{t("Имя")}</Text>
-        <TextInput
-          style={styles.input}
-          value={name}
-          onChangeText={setName}
-          editable={isEditing}
-        />
+            <TouchableOpacity
+              style={styles.editButton}
+              onPress={() => navigation.navigate("Настройки профиля")}
+            >
+              <Ionicons name="create-outline" size={20} color="white" />
+              <Text style={styles.editButtonText}>Редактировать профиль</Text>
+            </TouchableOpacity>
+          </View>
 
-        <Text style={styles.label}>Email</Text>
-        <TextInput
-          style={styles.input}
-          value={email}
-          onChangeText={setEmail}
-          editable={isEditing}
-        />
-
-        <Text style={styles.label}>{t("Пароль")}</Text>
-        <TextInput
-          style={styles.input}
-          value={password}
-          onChangeText={setPassword}
-          editable={isEditing}
-          secureTextEntry
-        />
-      </View>
-
-      <View style={styles.buttonsSection}>
-        {isEditing ? (
-          <Button title={t("Сохранить")} onPress={handleSave} />
-        ) : (
-          <Button
-            title={t("Редактировать профиль")}
-            onPress={() => setIsEditing(true)}
-          />
-        )}
-        <TouchableOpacity onPress={handleLogout} style={styles.logoutButton}>
-          <Text style={styles.logoutText}>{t("Выйти из аккаунта")}</Text>
-        </TouchableOpacity>
-      </View>
-    </View>
+          {/* Баланс */}
+          <View style={styles.balanceCard}>
+            <View style={styles.balanceItem}>
+              <Text style={styles.balanceText}>Баланс:</Text>
+              <Text style={styles.balanceValue}>{user.balance}</Text>
+            </View>
+            <View style={styles.divider} />
+            <View style={styles.balanceItem}>
+              <Text style={styles.balanceText}>Бонусы:</Text>
+              <Text style={styles.balanceValue}>{user.bonuses}</Text>
+            </View>
+          </View>
+        </ScrollView>
+      </LinearGradient>
+    </ImageBackground>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
+  imageBackground: {
     flex: 1,
-    padding: 35,
-    backgroundColor: "#f4f4f8",
+    resizeMode: "cover",
   },
-  header: {
+  gradient: {
+    flex: 1,
+  },
+  container: {
+    flexGrow: 1,
+    padding: 20,
     alignItems: "center",
-    marginBottom: 20,
   },
-  username: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginTop: 10,
+  profileCard: {
+    backgroundColor: "white",
+    width: "100%",
+    alignItems: "center",
+    padding: 20,
+    borderRadius: 15,
+    shadowOpacity: 0.3,
+    shadowRadius: 6,
+    elevation: 6,
   },
-  infoSection: {
-    marginVertical: 20,
+  avatar: { width: 120, height: 120, borderRadius: 60, marginBottom: 15 },
+  name: { fontSize: 24, fontWeight: "bold" },
+  email: { fontSize: 16, color: "gray", marginBottom: 15 },
+  editButton: {
+    flexDirection: "row",
+    backgroundColor: "#007AFF",
+    paddingVertical: 12,
+    paddingHorizontal: 22,
+    borderRadius: 10,
+    alignItems: "center",
   },
-  label: {
-    fontSize: 16,
-    color: "gray",
-    marginBottom: 5,
-  },
-  input: {
-    borderWidth: 1,
-    borderColor: "#ccc",
-    padding: 10,
-    fontSize: 18,
-    marginBottom: 15,
-    backgroundColor: "#fff",
-    borderRadius: 8,
-  },
-  buttonsSection: {
+  editButtonText: { color: "white", fontSize: 16, marginLeft: 10 },
+  balanceCard: {
+    backgroundColor: "white",
+    width: "100%",
+    padding: 20,
+    borderRadius: 15,
     marginTop: 20,
+    shadowOpacity: 0.3,
+    shadowRadius: 6,
+    elevation: 6,
   },
-  logoutButton: {
-    marginTop: 15,
+  balanceItem: { flexDirection: "row", justifyContent: "space-between" },
+  balanceText: { fontSize: 18, color: "gray" },
+  balanceValue: { fontSize: 18, fontWeight: "bold" },
+  divider: { height: 1, backgroundColor: "#ddd", marginVertical: 12 },
+  menu: { marginTop: 20, width: "100%" },
+  menuItem: {
+    flexDirection: "row",
     alignItems: "center",
+    backgroundColor: "white",
+    padding: 15,
+    borderRadius: 10,
+    marginBottom: 10,
+    shadowOpacity: 0.2,
+    shadowRadius: 5,
+    elevation: 4,
   },
-  logoutText: {
-    color: "red",
-    fontSize: 16,
-  },
+  menuText: { fontSize: 18, marginLeft: 12 },
 });
 
-export default ProfileScreen;
+export default MyProfileScreen;

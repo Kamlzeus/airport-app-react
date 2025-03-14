@@ -6,7 +6,7 @@ import { Ionicons, FontAwesome5 } from "@expo/vector-icons";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import HomeScreen from "./screens/HomeScreen";
 import MapScreen from "./screens/MapScreen";
-import QrScreen from "./screens/QrScreen";
+import FlyflyScreen from "./screens/FlyflyScreen";
 import TicketsScreen from "./screens/TicketsScreen";
 import NotificationSettingsScreen from "./screens/NotificationSettingsScreen";
 import AuthScreen from "./screens/AuthScreen";
@@ -28,6 +28,10 @@ import "./i18n"; // Подключаем локализацию
 import { useTranslation } from "react-i18next";
 import LanguageSwitcher from "./LanguageSwitcher";
 import { resources } from "./i18n"; // Импортируем переводы
+import ProfileSettings from "./screens/ProfileSettings";
+import EditScreen from "./screens/EditScreen";
+import InfoScreen from "./screens/InfoScreen";
+import TripHistoryScreen from "./screens/TripHistoryScreen";
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -42,19 +46,6 @@ function AuthStack() {
         options={{ headerShown: false }}
       />
     </Stack.Navigator>
-  );
-}
-
-function SettingsDrawer() {
-  return (
-    <Drawer.Navigator>
-      <Drawer.Screen name="Профиль" component={ProfileScreen} />
-      <Drawer.Screen name="Мой билет" component={TicketsScreen} />
-      <Drawer.Screen
-        name="Уведомления"
-        component={NotificationSettingsScreen}
-      />
-    </Drawer.Navigator>
   );
 }
 
@@ -76,14 +67,14 @@ function MainTabs() {
               case "Главная":
                 iconName = "home-outline";
                 return <Ionicons name={iconName} size={size} color={color} />;
+              case "Рейсы":
+                iconName = "airplane-outline";
+                return <Ionicons name={iconName} size={size} color={color} />;
               case "Карта":
                 iconName = "map-outline";
                 return <Ionicons name={iconName} size={size} color={color} />;
               case "Такси":
                 iconName = "car-outline";
-                return <Ionicons name={iconName} size={size} color={color} />;
-              case "ChatBot":
-                iconName = "chatbubbles-outline";
                 return <Ionicons name={iconName} size={size} color={color} />;
               case "Билеты":
                 iconName = "ticket-alt";
@@ -110,7 +101,8 @@ function MainTabs() {
         };
       }}
     >
-      <Tab.Screen name={t("ChatBot")} component={QrScreen} />
+      <Tab.Screen name={t("Рейсы")} component={FlyflyScreen} />
+
       <Tab.Screen name={t("Билеты")} component={TicketsScreen} />
       <Tab.Screen
         name={t("Главная")}
@@ -160,11 +152,15 @@ function MainStack() {
         options={{ headerShown: false }}
       />
       <Stack.Screen
+        name="EditScreen"
+        component={EditScreen}
+        options={{ title: "Редактировать профиль" }}
+      />
+      <Stack.Screen
         name="TicketPurchase"
         component={TicketPurchaseScreen}
         options={{ headerShown: true, title: "Покупка билета" }}
       />
-
       <Stack.Screen
         name="Уведомления"
         component={NotificationSettingsScreen}
@@ -210,7 +206,31 @@ function MainStack() {
         component={CafesScreen}
         options={{ title: "Кафе" }}
       />
+      <Stack.Screen
+        name="InfoScreen"
+        component={InfoScreen}
+        options={{ title: "Информация" }}
+      />
     </Stack.Navigator>
+  );
+}
+function MainDrawer() {
+  return (
+    <Drawer.Navigator>
+      <Drawer.Screen
+        name="Главная"
+        component={MainStack}
+        options={{ headerShown: false }}
+      />
+      <Drawer.Screen name="Мой профиль" component={ProfileScreen} />
+      <Drawer.Screen name="Настройки профиля" component={ProfileSettings} />
+      <Drawer.Screen name="Мой билет" component={MyTicketScreen} />
+      <Drawer.Screen name="История Поездок" component={MyTicketScreen} />
+      <Drawer.Screen
+        name="Уведомления"
+        component={NotificationSettingsScreen}
+      />
+    </Drawer.Navigator>
   );
 }
 
@@ -226,8 +246,23 @@ export default function App() {
             options={{ headerShown: false }}
           />
           <Drawer.Screen
-            name={t("Профиль")}
+            name={t("Мой профиль")}
             component={ProfileScreen}
+            options={({ navigation }) => ({
+              headerLeft: () => (
+                <Ionicons
+                  name="menu-outline"
+                  size={24}
+                  color="black"
+                  style={{ marginLeft: 15 }}
+                  onPress={() => navigation.openDrawer()} // Открытие бокового меню
+                />
+              ),
+            })}
+          />
+          <Drawer.Screen
+            name={t("История Поездок")}
+            component={TripHistoryScreen}
             options={({ navigation }) => ({
               headerLeft: () => (
                 <Ionicons
@@ -256,8 +291,8 @@ export default function App() {
             })}
           />
           <Drawer.Screen
-            name={t("Уведомления")}
-            component={NotificationSettingsScreen}
+            name={t("Настройки профиля")}
+            component={ProfileSettings}
             options={({ navigation }) => ({
               headerLeft: () => (
                 <Ionicons

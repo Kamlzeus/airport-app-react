@@ -6,8 +6,9 @@ const EcoTravelScreen = ({ route }) => {
 
   return (
     <ScrollView style={styles.container}>
-      <Text style={styles.title}>{title}</Text>
-      <Text style={styles.content}>{content}</Text>
+      <TouchableOpacity>
+        onPress={() => navigation.navigate("InfoScreen")}
+      </TouchableOpacity>
     </ScrollView>
   );
 };

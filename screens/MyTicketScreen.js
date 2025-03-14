@@ -1,151 +1,219 @@
-import React, { useState, useEffect } from "react";
+import React from "react";
 import {
   View,
   Text,
   StyleSheet,
-  Button,
-  ScrollView,
+  ImageBackground,
   TouchableOpacity,
+  Image,
 } from "react-native";
-import { useAuth } from "../context/AuthContext";
-import { useTranslation } from "react-i18next";
+import { Ionicons } from "@expo/vector-icons";
+import { LinearGradient } from "expo-linear-gradient";
 
-export default function MyTicketScreen() {
-  const { t } = useTranslation();
-  const { user } = useAuth();
-  const [ticket, setTicket] = useState(null);
-
-  useEffect(() => {
-    const fetchTicket = () => {
-      setTicket({
-        flightNumber: "MS123",
-        departureTime: "2024-11-30 15:30",
-        arrivalTime: "2024-11-30 17:45",
-        departureAirport: t("Манас Международный Аэропорт"),
-        arrivalAirport: t("Шереметьево"),
-        gate: "A5",
-        seat: "12A",
-      });
-    };
-
-    fetchTicket();
-  }, []);
-
-  if (!ticket) {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.loadingText}>
-          {t("Загружаем информацию о билете...")}
-        </Text>
-      </View>
-    );
-  }
+const MyTicketScreen = () => {
+  const flight = {
+    airlineLogo:
+      "https://companieslogo.com/img/orig/THYAO.IS-f22d40e8.png?t=1720244494",
+    airlineName: "Turkish Airlines",
+    ticketNumber: "Boeing 777",
+    from: "Манас (FRU)",
+    to: "Стамбул (IST)",
+    departureTime: "10:30",
+    departureDate: "12 Марта",
+    arrivalTime: "14:50",
+    arrivalDate: "12 Марта",
+    duration: "4ч 20м",
+    terminal: "1",
+    gate: "B12",
+    checkInDesk: "D3",
+    exit: "Gate 5",
+    status: "Ожидается",
+  };
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <View style={styles.ticketCard}>
-        <Text style={styles.cardTitle}>{t("Информация о рейсе")}</Text>
+    <ImageBackground
+      source={{
+        uri: "https://triptokyrgyzstan.com/sites/default/files/styles/hero/public/images/2019-04/slide-1960x857-07.jpg.webp?itok=PMx4TeLB",
+      }}
+      style={styles.imageBackground}
+    >
+      <LinearGradient
+        colors={["rgba(0, 150, 255, 0.5)", "rgba(255, 255, 255, 1)"]}
+        style={styles.gradient}
+      >
+        <View style={styles.container}>
+          <View style={styles.flightCard}>
+            {/* Логотип + Название авиакомпании */}
+            <View style={styles.airlineContainer}>
+              <Image source={{ uri: flight.airlineLogo }} style={styles.logo} />
+              <Text style={styles.airlineName}>{flight.airlineName}</Text>
+            </View>
 
-        <View style={styles.ticketInfo}>
-          <Text style={styles.label}>{t("Номер рейса")}:</Text>
-          <Text style={styles.info}>{ticket.flightNumber}</Text>
+            {/* № Билета */}
+            <Text style={styles.ticketNumber}>
+              № билета: {flight.ticketNumber}
+            </Text>
 
-          <Text style={styles.label}>{t("Дата и время вылета")}:</Text>
-          <Text style={styles.info}>{ticket.departureTime}</Text>
+            {/* Линия-разделитель */}
+            <View style={styles.separator} />
 
-          <Text style={styles.label}>{t("Дата и время прилета")}:</Text>
-          <Text style={styles.info}>{ticket.arrivalTime}</Text>
+            {/* Маршрут */}
+            <Text style={styles.routeText}>
+              {flight.from}{" "}
+              <Ionicons name="airplane-outline" size={20} color="black" />{" "}
+              {flight.to}
+            </Text>
 
-          <Text style={styles.label}>{t("Аэропорт вылета")}:</Text>
-          <Text style={styles.info}>{ticket.departureAirport}</Text>
+            {/* Вылет и прилёт */}
+            <View style={styles.flightInfoContainer}>
+              <View style={[styles.flightBox, styles.darkBlueBox]}>
+                <Text style={styles.boxTitle}>Вылет</Text>
+                <Text style={styles.boxText}>
+                  Время: {flight.departureTime}
+                </Text>
+                <Text style={styles.boxText}>Дата: {flight.departureDate}</Text>
+              </View>
+              <View style={[styles.flightBox, styles.blueBox]}>
+                <Text style={styles.boxTitle}>Прилёт</Text>
+                <Text style={styles.boxText}>Время: {flight.arrivalTime}</Text>
+                <Text style={styles.boxText}>Дата: {flight.arrivalDate}</Text>
+              </View>
+            </View>
 
-          <Text style={styles.label}>{t("Аэропорт прилета")}:</Text>
-          <Text style={styles.info}>{ticket.arrivalAirport}</Text>
-
-          <Text style={styles.label}>{t("Выход")}:</Text>
-          <Text style={styles.info}>{ticket.gate}</Text>
-
-          <Text style={styles.label}>{t("Место")}:</Text>
-          <Text style={styles.info}>{ticket.seat}</Text>
+            {/* Доп. информация */}
+            <View style={styles.extraInfoContainer}>
+              <View style={styles.extraInfoBox}>
+                <Ionicons name="exit-outline" size={20} color="gray" />
+                <Text style={styles.extraText}>Выход: {flight.exit}</Text>
+              </View>
+              <View style={styles.extraInfoBox}>
+                <Ionicons name="clipboard-outline" size={20} color="gray" />
+                <Text style={styles.extraText}>
+                  Стойка регистрации: {flight.checkInDesk}
+                </Text>
+              </View>
+              <View style={styles.extraInfoBox}>
+                <Ionicons
+                  name="checkmark-circle-outline"
+                  size={20}
+                  color="gray"
+                />
+                <Text style={styles.extraText}>Статус: {flight.status}</Text>
+              </View>
+            </View>
+          </View>
         </View>
-      </View>
-
-      <View style={styles.buttonContainer}>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => alert(t("Билет отменен"))}
-        >
-          <Text style={styles.buttonText}>{t("Отменить билет")}</Text>
-        </TouchableOpacity>
-      </View>
-    </ScrollView>
+      </LinearGradient>
+    </ImageBackground>
   );
-}
+};
 
 const styles = StyleSheet.create({
-  container: {
+  imageBackground: {
     flex: 1,
-    padding: 30,
-    backgroundColor: "#f5f5f5",
+    justifyContent: "center",
   },
-  header: {
-    fontSize: 26,
-    fontWeight: "bold",
-    marginBottom: 50, // Уменьшили отступ сверху для заголовка
-    marginTop: 50, // Добавлен небольшой отступ сверху
-    textAlign: "center",
-    color: "#333",
+  gradient: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    paddingHorizontal: 20,
   },
-  ticketCard: {
-    backgroundColor: "#fff",
-    borderRadius: 12,
+  container: {
+    alignItems: "center",
+    width: "100%",
+  },
+  flightCard: {
+    width: "90%",
+    backgroundColor: "rgba(255, 255, 255, 0.82)", // Полупрозрачный белый фон
     padding: 20,
+    borderRadius: 15,
     shadowColor: "#000",
-    shadowOpacity: 0.1,
-    shadowRadius: 10,
-    shadowOffset: { width: 0, height: 10 },
-    marginBottom: 30,
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.2,
+    shadowRadius: 4,
+    elevation: 3,
   },
-  cardTitle: {
-    fontSize: 20,
-    fontWeight: "bold",
-    color: "#333",
-    marginBottom: 15,
-  },
-  ticketInfo: {
-    marginBottom: 20,
-  },
-  label: {
-    fontSize: 16,
-    fontWeight: "600",
-    color: "#555",
-    marginVertical: 5,
-  },
-  info: {
-    fontSize: 16,
-    color: "#333",
+  airlineContainer: {
+    flexDirection: "row",
+    alignItems: "center",
     marginBottom: 10,
   },
-  buttonContainer: {
-    marginTop: 30, // Отступ для кнопки
-    alignItems: "center", // Выравнивание кнопки по центру
+  logo: {
+    width: 50,
+    height: 50,
+    resizeMode: "contain",
+    marginLeft: 30,
   },
-  button: {
-    backgroundColor: "#FF6347",
-    paddingVertical: 15,
-    borderRadius: 12,
-    width: "80%", // Ширина кнопки
-    alignItems: "center",
-  },
-  buttonText: {
-    color: "#fff",
+  airlineName: {
     fontSize: 18,
     fontWeight: "bold",
+    marginLeft: 40,
   },
-  loadingText: {
-    fontSize: 18,
+  ticketNumber: {
+    fontSize: 14,
+    fontWeight: "500",
+    color: "gray",
+    marginBottom: 10,
     textAlign: "center",
-    marginTop: 20,
-    color: "#333",
+  },
+  separator: {
+    width: "100%",
+    height: 1,
+    backgroundColor: "#ccc",
+    marginVertical: 10,
+  },
+  routeText: {
+    fontSize: 20,
+    fontWeight: "bold",
+    textAlign: "center",
+    width: "100%",
+    marginBottom: 10,
+  },
+  flightInfoContainer: {
+    flexDirection: "row",
+    width: "100%",
+    justifyContent: "space-between",
+    marginTop: 10,
+  },
+  flightBox: {
+    flex: 1,
+    paddingVertical: 15,
+    borderRadius: 10,
+    paddingHorizontal: 10,
+  },
+  darkBlueBox: {
+    backgroundColor: "#003366",
+    marginRight: 5,
+  },
+  blueBox: {
+    backgroundColor: "#007AFF",
+    marginLeft: 5,
+  },
+  boxTitle: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "white",
+  },
+  boxText: {
+    fontSize: 14,
+    color: "white",
+    alignItems: "left",
+  },
+  extraInfoContainer: {
+    width: "100%",
+    marginTop: 15,
+  },
+  extraInfoBox: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginVertical: 5,
+  },
+  extraText: {
+    fontSize: 16,
+    marginLeft: 10,
+    color: "gray",
   },
 });
+
+export default MyTicketScreen;

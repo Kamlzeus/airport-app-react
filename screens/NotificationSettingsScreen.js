@@ -6,9 +6,11 @@ import {
   TouchableOpacity,
   Animated,
 } from "react-native";
+import { useRoute, useNavigation } from "@react-navigation/native"; // Добавлен useNavigation
 import * as Notifications from "expo-notifications";
 import DateTimePicker from "@react-native-community/datetimepicker";
-import { MaterialCommunityIcons } from "@expo/vector-icons";
+import { MaterialCommunityIcons } from "@expo/vector-icons"; // ✅ Импорт MaterialCommunityIcons
+import { Ionicons } from "@expo/vector-icons";
 import { useTranslation } from "react-i18next";
 
 Notifications.setNotificationHandler({
@@ -20,10 +22,15 @@ Notifications.setNotificationHandler({
 });
 
 const NotificationSettingsScreen = () => {
+  const route = useRoute();
+  const navigation = useNavigation();
+  const [notificationsEnabled, setNotificationsEnabled] = useState(false);
+  const { notifications = false, setNotifications = () => {} } =
+    route.params || {};
+
   const { t } = useTranslation();
   const [date, setDate] = useState(new Date());
   const [showPicker, setShowPicker] = useState(false);
-  const [notificationEnabled, setNotificationEnabled] = useState(false);
   const fadeAnim = useState(new Animated.Value(0))[0];
 
   const requestNotificationPermission = async () => {
@@ -39,23 +46,9 @@ const NotificationSettingsScreen = () => {
     return true;
   };
 
-  const sendInstantNotification = async (message) => {
-    await Notifications.scheduleNotificationAsync({
-      content: {
-        title: t("Подтверждение"),
-        body: message,
-        sound: true,
-      },
-      trigger: null, // Отправить мгновенное уведомление
-    });
-  };
-
   const scheduleNotification = async () => {
     const permissionGranted = await requestNotificationPermission();
     if (!permissionGranted) return;
-
-    const triggerTime = new Date(date);
-    triggerTime.setSeconds(0);
 
     await Notifications.scheduleNotificationAsync({
       content: {
@@ -64,26 +57,19 @@ const NotificationSettingsScreen = () => {
         sound: true,
       },
       trigger: {
-        hour: triggerTime.getHours(),
-        minute: triggerTime.getMinutes(),
+        hour: date.getHours(),
+        minute: date.getMinutes(),
         repeats: false,
       },
     });
 
-    await sendInstantNotification(
-      t("Уведомление успешно запланировано на ") +
-        triggerTime.toLocaleTimeString()
-    );
+    alert(t("Уведомление запланировано на ") + date.toLocaleTimeString());
+    setNotificationsEnabled(true);
   };
-
-  const toggleNotifications = async () => {
-    setNotificationEnabled((prev) => !prev);
-    if (notificationEnabled) {
-      await Notifications.cancelAllScheduledNotificationsAsync();
-      alert(t("Все уведомления отключены."));
-    } else {
-      await scheduleNotification();
-    }
+  const disableNotifications = async () => {
+    await Notifications.cancelAllScheduledNotificationsAsync();
+    setNotificationsEnabled(false);
+    alert(t("Все уведомления отключены."));
   };
 
   useEffect(() => {
@@ -103,7 +89,16 @@ const NotificationSettingsScreen = () => {
 
   return (
     <Animated.View style={[styles.container, { opacity: fadeAnim }]}>
-      <Text style={styles.title}>{t("Настройка уведомлений")}</Text>
+      <View style={styles.header}>
+        <TouchableOpacity
+          onPress={() => navigation.goBack()}
+          style={styles.backButton}
+        >
+          <Ionicons name="chevron-back" size={24} color="#007AFF" />
+          <Text style={styles.backText}>{t("Назад")}</Text>
+        </TouchableOpacity>
+        <Text style={styles.headerTitle}>{t("Уведомления")}</Text>
+      </View>
       <Text style={styles.description}>
         {t("Выберите время для напоминания перед рейсом.")}
       </Text>
@@ -121,7 +116,10 @@ const NotificationSettingsScreen = () => {
           value={date}
           mode="time"
           display="default"
-          onChange={onChange}
+          onChange={(event, selectedDate) => {
+            setShowPicker(false);
+            if (selectedDate) setDate(selectedDate);
+          }}
         />
       )}
 
@@ -132,63 +130,78 @@ const NotificationSettingsScreen = () => {
         <Text style={styles.buttonText}>{t("Запланировать напоминание")}</Text>
       </TouchableOpacity>
 
-      <View style={styles.notificationSection}>
+      {notificationsEnabled ? (
         <TouchableOpacity
-          style={[
-            styles.toggleButton,
-            notificationEnabled ? styles.enabled : styles.disabled,
-          ]}
-          onPress={toggleNotifications}
+          style={styles.disableButton}
+          onPress={disableNotifications}
         >
           <Text style={styles.toggleButtonText}>
-            {notificationEnabled
-              ? t("Выключить уведомления")
-              : t("Включить уведомления")}
+            {t("Выключить уведомления")}
           </Text>
         </TouchableOpacity>
-        <Text style={styles.notificationStatus}>
-          {t("Уведомления")}{" "}
-          {notificationEnabled ? t("включены") : t("выключены")}
-        </Text>
-      </View>
+      ) : (
+        <TouchableOpacity
+          style={styles.enableButton}
+          onPress={scheduleNotification}
+        >
+          <Text style={styles.toggleButtonText}>
+            {t("Включить уведомления")}
+          </Text>
+        </TouchableOpacity>
+      )}
+
+      <Text style={styles.notificationStatus}>
+        {t("Уведомления")}{" "}
+        {notificationsEnabled ? t("включены") : t("выключены")}
+      </Text>
     </Animated.View>
   );
 };
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#f5f5f5",
+    backgroundColor: "#FFFFFF",
     padding: 20,
   },
-  title: {
-    fontSize: 30,
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    paddingTop: 50,
+    paddingBottom: 20,
+    borderBottomWidth: 1,
+    borderBottomColor: "#ddd",
+  },
+  backButton: {
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  backText: {
+    color: "#007AFF",
+    fontSize: 15,
+  },
+  headerTitle: {
+    fontSize: 20,
     fontWeight: "bold",
-    marginBottom: 40,
-    color: "#333",
+    textAlign: "center",
+    flex: 1,
+    marginRight: 65,
   },
   description: {
     fontSize: 16,
     color: "#666",
-    marginBottom: 20,
     textAlign: "center",
-    marginHorizontal: 20,
+    marginTop: 160,
+    marginBottom: 20,
   },
   timePickerButton: {
-    backgroundColor: "#03a9f4",
+    backgroundColor: "#007AFF",
     paddingVertical: 15,
     paddingHorizontal: 30,
     borderRadius: 30,
     flexDirection: "row",
     alignItems: "center",
+    justifyContent: "center",
     marginBottom: 20,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 6,
-    elevation: 5,
   },
   buttonText: {
     fontSize: 18,
@@ -197,37 +210,28 @@ const styles = StyleSheet.create({
     textTransform: "uppercase",
   },
   scheduleButton: {
-    backgroundColor: "#03a9f4",
+    backgroundColor: "#007AFF",
     paddingVertical: 15,
     paddingHorizontal: 30,
     borderRadius: 30,
-    marginBottom: 30,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 6,
-    elevation: 5,
-  },
-  notificationSection: {
-    marginTop: 20,
     alignItems: "center",
+    marginBottom: 20,
   },
-  toggleButton: {
+  enableButton: {
+    backgroundColor: "#4CAF50",
     paddingVertical: 15,
     paddingHorizontal: 30,
     borderRadius: 30,
+    alignItems: "center",
     marginBottom: 10,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 4 },
-    shadowOpacity: 0.2,
-    shadowRadius: 6,
-    elevation: 5,
   },
-  enabled: {
-    backgroundColor: "#f44336",
-  },
-  disabled: {
-    backgroundColor: "#4caf50",
+  disableButton: {
+    backgroundColor: "#FF3B30",
+    paddingVertical: 15,
+    paddingHorizontal: 30,
+    borderRadius: 30,
+    alignItems: "center",
+    marginBottom: 10,
   },
   toggleButtonText: {
     fontSize: 18,
@@ -236,6 +240,8 @@ const styles = StyleSheet.create({
   notificationStatus: {
     fontSize: 16,
     color: "#333",
+    textAlign: "center",
+    marginTop: 10,
   },
 });
 

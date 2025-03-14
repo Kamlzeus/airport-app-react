@@ -10,10 +10,8 @@ import {
 import { LinearGradient } from "expo-linear-gradient";
 import { useAuth } from "../context/AuthContext";
 import RegisterForm from "./RegisterForm";
-import { useTranslation } from "react-i18next";
 
 const AuthScreen = ({ navigation }) => {
-  const { t } = useTranslation();
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [showRegister, setShowRegister] = useState(false);
@@ -29,12 +27,12 @@ const AuthScreen = ({ navigation }) => {
 
       setIsLoggedIn(true);
     } else {
-      alert(t("Пожалуйста, введите имя пользователя и пароль."));
+      alert("Пожалуйста, введите имя пользователя и пароль.");
     }
   };
 
   const handleRegister = () => {
-    alert(t("Пользователь зарегистрирован!"));
+    alert("Пользователь зарегистрирован!");
     setShowRegister(false);
   };
 
@@ -53,20 +51,20 @@ const AuthScreen = ({ navigation }) => {
             style={styles.logo}
           />
 
-          <Text style={styles.title}>{t("Войти или зарегистрироваться")}</Text>
+          <Text style={styles.title}>Войти или зарегистрироваться</Text>
 
           {showRegister ? (
             <RegisterForm onRegister={handleRegister} />
           ) : (
             <View>
               <TextInput
-                placeholder={t("Имя пользователя")}
+                placeholder="Имя пользователя"
                 style={styles.input}
                 value={username}
                 onChangeText={setUsername}
               />
               <TextInput
-                placeholder={t("Пароль")}
+                placeholder="Пароль"
                 secureTextEntry
                 style={styles.input}
                 value={password}
@@ -82,12 +80,12 @@ const AuthScreen = ({ navigation }) => {
                   end={{ x: 1, y: 1 }}
                   style={styles.loginButton}
                 >
-                  <Text style={styles.buttonText}>{t("Войти")}</Text>
+                  <Text style={styles.buttonText}>Войти</Text>
                 </LinearGradient>
               </TouchableOpacity>
               <TouchableOpacity onPress={() => setShowRegister(true)}>
                 <Text style={styles.switchText}>
-                  {t("Не зарегистрированы? Создать аккаунт")}
+                  Не зарегистрированы? Создать аккаунт
                 </Text>
               </TouchableOpacity>
             </View>
