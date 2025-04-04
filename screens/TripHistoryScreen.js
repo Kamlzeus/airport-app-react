@@ -2,42 +2,87 @@ import React, { useState } from "react";
 import {
   View,
   Text,
-  TouchableOpacity,
   StyleSheet,
   FlatList,
+  Image,
   ImageBackground,
 } from "react-native";
-import { useNavigation } from "@react-navigation/native";
-import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 
 const TripHistoryScreen = () => {
-  const navigation = useNavigation();
+  const trips = [
+    {
+      id: "1337231",
+      dateTime: "02:30 | 15.01.2025",
+      airlineName: "Airline",
+      logoUri:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR8QtL3CdR8polag68knX2ZFiJPVT39UR4baw&s",
+    },
+    {
+      id: "1337232",
+      dateTime: "12:30 | 16.01.2025",
+      airlineName: "Airline",
+      logoUri:
+        "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRe2nKQgT4x4dX-sUPJydPQ3i-OXGL8uItY71NczAQRQIA3iBce6GowD_KtHw6Oa1dqGmY&usqp=CAU",
+    },
+    {
+      id: "1337233",
+      dateTime: "11:30 | 17.01.2025",
+      airlineName: "Airline",
+      logoUri:
+        "https://upload.wikimedia.org/wikipedia/commons/thumb/d/d0/Emirates_logo.svg/1200px-Emirates_logo.svg.png",
+    },
+    {
+      id: "1337234",
+      dateTime: "16:30 | 18.01.2025",
+      airlineName: "Airline",
+      logoUri:
+        "https://logoeps.com/wp-content/uploads/2013/04/pegasus-airlines-eps-vector-logo.png",
+    },
+    {
+      id: "1337235",
+      dateTime: "22:00 | 19.01.2025",
+      airlineName: "Airline",
+      logoUri:
+        "https://www.itl.cat/pngfile/big/99-995290_qatar-airways-logo.png",
+    },
+    {
+      id: "1337236",
+      dateTime: "19:00 | 20.01.2025",
+      airlineName: "Airline",
+      logoUri:
+        "https://s3.eu-central-1.amazonaws.com/static.obilet.com/images/partner/1474-lg.png",
+    },
+    {
+      id: "1337237",
+      dateTime: "01:00 | 21.01.2025",
+      airlineName: "Airline",
+      logoUri:
+        "https://s202.q4cdn.com/986123435/files/doc_downloads/logos/american-airlines/THUMB-aa_aa__ahz_4cp_grd_pos-(1).png",
+    },
+    {
+      id: "1337238",
+      dateTime: "09:30 | 22.01.2025",
+      airlineName: "Airline",
+      logoUri:
+        "https://companieslogo.com/img/orig/THYAO.IS-f22d40e8.png?t=1720244494",
+    },
+  ];
 
-  // Пример данных поездок
-  const [trips] = useState([
-    {
-      id: "1",
-      date: "12 марта 2025",
-      from: "Бишкек",
-      to: "Ощ",
-      price: "350$",
-    },
-    {
-      id: "2",
-      date: "10 марта 2025",
-      from: "Ош",
-      to: "Астана",
-      price: "1200$",
-    },
-    {
-      id: "3",
-      date: "8 марта 2025",
-      from: "Астана",
-      to: "Южная Корея",
-      price: "500$",
-    },
-  ]);
+  const renderItem = ({ item }) => (
+    <View style={styles.card}>
+      <View style={styles.textBlock}>
+        <Text style={styles.airline}>{item.airlineName}</Text>
+        <Text style={styles.flightNumber}>#{item.id}</Text>
+        <Text style={styles.dateTime}>{item.dateTime}</Text>
+      </View>
+      <Image
+        source={{ uri: item.logoUri }}
+        style={styles.logo}
+        resizeMode="contain"
+      />
+    </View>
+  );
 
   return (
     <ImageBackground
@@ -48,20 +93,14 @@ const TripHistoryScreen = () => {
     >
       <LinearGradient
         colors={["rgba(0, 150, 255, 0.5)", "rgba(255, 255, 255, 1)"]}
-        style={styles.gradient}
+        style={styles.overlay}
       >
         <View style={styles.container}>
           <FlatList
             data={trips}
             keyExtractor={(item) => item.id}
-            renderItem={({ item }) => (
-              <View style={styles.tripCard}>
-                <Text style={styles.date}>{item.date}</Text>
-                <Text style={styles.location}>От: {item.from}</Text>
-                <Text style={styles.location}>До: {item.to}</Text>
-                <Text style={styles.price}>Стоимость: {item.price}</Text>
-              </View>
-            )}
+            renderItem={renderItem}
+            contentContainerStyle={styles.listContainer}
           />
         </View>
       </LinearGradient>
@@ -74,26 +113,59 @@ const styles = StyleSheet.create({
     flex: 1,
     resizeMode: "cover",
   },
+  header: {
+    fontSize: 20,
+    fontWeight: "bold",
+    marginBottom: 15,
+    color: "#333",
+  },
   gradient: {
     flex: 1,
   },
-  container: {
+  overlay: {
     flex: 1,
-    padding: 50,
+    paddingTop: 40,
+    paddingHorizontal: 20,
+  },
+  listContainer: {
+    paddingBottom: 20,
+  },
+  card: {
+    backgroundColor: "#fff",
+    borderRadius: 15,
+    flexDirection: "row",
     alignItems: "center",
-  },
-  tripCard: {
-    backgroundColor: "white",
-    padding: 40,
-    borderRadius: 10,
-    marginBottom: 20,
-    shadowOpacity: 0.2,
+    padding: 20,
+    marginBottom: 15,
+    elevation: 5,
+    shadowColor: "#000",
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 2 },
     shadowRadius: 5,
-    elevation: 4,
   },
-  date: { fontSize: 16, fontWeight: "bold", marginBottom: 6 },
-  location: { fontSize: 15, color: "gray", marginBottom: 6 },
-  price: { fontSize: 15, fontWeight: "bold", color: "#007AFF" },
+  textBlock: {
+    flex: 1,
+  },
+  airline: {
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  flightNumber: {
+    fontSize: 15,
+    marginTop: 3,
+  },
+  dateTime: {
+    fontSize: 14,
+    color: "#555",
+    marginTop: 3,
+  },
+  logo: {
+    width: 50,
+    height: 50,
+    marginLeft: 15,
+    borderRadius: 10,
+    backgroundColor: "#f2f2f2",
+  },
 });
 
 export default TripHistoryScreen;

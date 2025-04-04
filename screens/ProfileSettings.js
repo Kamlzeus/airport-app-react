@@ -9,21 +9,23 @@ import {
   Alert,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { Ionicons, MaterialIcons } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 import { useAuth } from "../context/AuthContext";
+import { useTranslation } from "react-i18next";
 
 const ProfileSettings = () => {
   const navigation = useNavigation();
   const { logout } = useAuth();
+  const { t } = useTranslation();
 
   // Данные пользователя
   const [user, setUser] = useState({
     avatar: "https://www.w3schools.com/w3images/avatar2.png",
-    name: "Иван Петров",
-    email: "ivan.petrov@example.com",
-    countryCode: "+996",
-    phone: "123456789",
-    nationality: "Кыргызстан",
+    name: t("Камиля Юсуфова"),
+    email: "kamiyus@example.com",
+    countryCode: "",
+    phone: "+996222160806",
+    nationality: "Казахстан",
     country: "Кыргызстан",
     password: "",
   });
@@ -38,19 +40,21 @@ const ProfileSettings = () => {
 
   // Функция сохранения изменений
   const handleSave = () => {
-    Alert.alert("Сохранение", "Ваши изменения сохранены!", [{ text: "ОК" }]);
+    Alert.alert(t("Сохранение"), t("Ваши изменения сохранены!"), [
+      { text: "ОК" },
+    ]);
     navigation.goBack(); // Возвращаемся назад
   };
 
   // Функция выхода
   const handleLogout = () => {
     Alert.alert(
-      "Выход",
-      "Вы уверены, что хотите выйти?",
+      t("Выход"),
+      t("Вы уверены, что хотите выйти?"),
       [
-        { text: "Отмена", style: "cancel" },
+        { text: t("Отмена"), style: "cancel" },
         {
-          text: "Выйти",
+          text: t("Выйти"),
           style: "destructive",
         },
       ],
@@ -72,20 +76,9 @@ const ProfileSettings = () => {
 
       {/* Поля для редактирования */}
       <View style={styles.settingsContainer}>
-        {/* Код страны */}
-        <View style={styles.inputContainer}>
-          <Text style={styles.label}>Код страны</Text>
-          <TextInput
-            style={styles.input}
-            value={user.countryCode}
-            keyboardType="phone-pad"
-            onChangeText={(text) => handleChange("countryCode", text)}
-          />
-        </View>
-
         {/* Телефон */}
         <View style={styles.inputContainer}>
-          <Text style={styles.label}>Мобильный телефон</Text>
+          <Text style={styles.label}>{t("Мобильный телефон")}</Text>
           <TextInput
             style={styles.input}
             value={user.phone}
@@ -107,19 +100,19 @@ const ProfileSettings = () => {
 
         {/* Пароль */}
         <View style={styles.inputContainer}>
-          <Text style={styles.label}>Пароль</Text>
+          <Text style={styles.label}>{t("Пароль")}</Text>
           <TextInput
             style={styles.input}
             value={user.password}
             secureTextEntry
-            placeholder="Введите новый пароль"
+            placeholder={t("Введите новый пароль")}
             onChangeText={(text) => handleChange("password", text)}
           />
         </View>
 
         {/* Гражданство */}
         <View style={styles.inputContainer}>
-          <Text style={styles.label}>Гражданство</Text>
+          <Text style={styles.label}>{t("Гражданство")}</Text>
           <TextInput
             style={styles.input}
             value={user.nationality}
@@ -129,7 +122,7 @@ const ProfileSettings = () => {
 
         {/* Страна */}
         <View style={styles.inputContainer}>
-          <Text style={styles.label}>Страна</Text>
+          <Text style={styles.label}>{t("Страна")}</Text>
           <TextInput
             style={styles.input}
             value={user.country}
@@ -142,12 +135,12 @@ const ProfileSettings = () => {
       <View style={styles.buttonContainer}>
         <TouchableOpacity style={styles.saveButton} onPress={handleSave}>
           <Ionicons name="save-outline" size={20} color="white" />
-          <Text style={styles.buttonText}>Сохранить</Text>
+          <Text style={styles.buttonText}>{t("Сохранить")}</Text>
         </TouchableOpacity>
 
         <TouchableOpacity style={styles.logoutButton} onPress={handleLogout}>
           <Ionicons name="log-out-outline" size={20} color="white" />
-          <Text style={styles.buttonText}>Выйти</Text>
+          <Text style={styles.buttonText}>{t("Выйти")}</Text>
         </TouchableOpacity>
       </View>
     </View>

@@ -54,7 +54,7 @@ const LanguageSwitcher = () => {
             style={{ backgroundColor: "white", padding: 20, borderRadius: 10 }}
           >
             <Text style={{ fontSize: 18, marginBottom: 10 }}>
-              {t("change_language")}
+              {t("Поменять язык")}
             </Text>
             <TouchableOpacity onPress={() => changeLanguage("en")}>
               <Text style={{ fontSize: 16, padding: 10 }}>🇬🇧 English</Text>
@@ -64,7 +64,7 @@ const LanguageSwitcher = () => {
             </TouchableOpacity>
             <TouchableOpacity onPress={() => setModalVisible(false)}>
               <Text style={{ fontSize: 16, padding: 10, color: "red" }}>
-                {t("close")}
+                {t("Закрыть")}
               </Text>
             </TouchableOpacity>
           </View>

@@ -89,16 +89,6 @@ const NotificationSettingsScreen = () => {
 
   return (
     <Animated.View style={[styles.container, { opacity: fadeAnim }]}>
-      <View style={styles.header}>
-        <TouchableOpacity
-          onPress={() => navigation.goBack()}
-          style={styles.backButton}
-        >
-          <Ionicons name="chevron-back" size={24} color="#007AFF" />
-          <Text style={styles.backText}>{t("Назад")}</Text>
-        </TouchableOpacity>
-        <Text style={styles.headerTitle}>{t("Уведомления")}</Text>
-      </View>
       <Text style={styles.description}>
         {t("Выберите время для напоминания перед рейсом.")}
       </Text>

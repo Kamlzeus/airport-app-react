@@ -9,19 +9,21 @@ import {
   ImageBackground,
 } from "react-native";
 import { useNavigation } from "@react-navigation/native";
-import { Ionicons, MaterialIcons } from "@expo/vector-icons";
+import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
+import { useTranslation } from "react-i18next";
 
 const MyProfileScreen = () => {
   const navigation = useNavigation();
+  const { t } = useTranslation();
 
   // Данные пользователя
   const [user] = useState({
     avatar: "https://www.w3schools.com/w3images/avatar2.png",
-    name: "Иван Петров",
-    email: "ivan.petrov@example.com",
+    name: t("Камиля Юсуфова"),
+    email: "kamiyus@example.com",
     balance: "1 250$",
-    bonuses: "250 Бонусов",
+    bonuses: "250 " + t("Бонусы"),
   });
 
   return (
@@ -44,22 +46,24 @@ const MyProfileScreen = () => {
 
             <TouchableOpacity
               style={styles.editButton}
-              onPress={() => navigation.navigate("Настройки профиля")}
+              onPress={() => navigation.navigate(t("Настройки профиля"))}
             >
               <Ionicons name="create-outline" size={20} color="white" />
-              <Text style={styles.editButtonText}>Редактировать профиль</Text>
+              <Text style={styles.editButtonText}>
+                {t("Редактировать профиль")}
+              </Text>
             </TouchableOpacity>
           </View>
 
           {/* Баланс */}
           <View style={styles.balanceCard}>
             <View style={styles.balanceItem}>
-              <Text style={styles.balanceText}>Баланс:</Text>
+              <Text style={styles.balanceText}>{t("Баланс")}:</Text>
               <Text style={styles.balanceValue}>{user.balance}</Text>
             </View>
             <View style={styles.divider} />
             <View style={styles.balanceItem}>
-              <Text style={styles.balanceText}>Бонусы:</Text>
+              <Text style={styles.balanceText}>{t("Бонусы")}:</Text>
               <Text style={styles.balanceValue}>{user.bonuses}</Text>
             </View>
           </View>
@@ -118,19 +122,6 @@ const styles = StyleSheet.create({
   balanceText: { fontSize: 18, color: "gray" },
   balanceValue: { fontSize: 18, fontWeight: "bold" },
   divider: { height: 1, backgroundColor: "#ddd", marginVertical: 12 },
-  menu: { marginTop: 20, width: "100%" },
-  menuItem: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "white",
-    padding: 15,
-    borderRadius: 10,
-    marginBottom: 10,
-    shadowOpacity: 0.2,
-    shadowRadius: 5,
-    elevation: 4,
-  },
-  menuText: { fontSize: 18, marginLeft: 12 },
 });
 
 export default MyProfileScreen;

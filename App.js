@@ -1,4 +1,8 @@
+import { LogBox } from "react-native";
+LogBox.ignoreLogs(["Support for defaultProps"]);
+
 import React from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createStackNavigator } from "@react-navigation/stack";
@@ -32,6 +36,8 @@ import ProfileSettings from "./screens/ProfileSettings";
 import EditScreen from "./screens/EditScreen";
 import InfoScreen from "./screens/InfoScreen";
 import TripHistoryScreen from "./screens/TripHistoryScreen";
+import SplashScreen from "./screens/SplashScreen";
+import TipDetailScreen from "./screens/TipDetailScreen";
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -51,9 +57,11 @@ function AuthStack() {
 
 function MainTabs() {
   const { t } = useTranslation();
+  const mainTabName = t("Главная");
 
   return (
     <Tab.Navigator
+      initialRouteName={mainTabName}
       screenOptions={({ route }) => {
         // Находим ключ из русской локализации
         const routeKey = Object.keys(resources["ru"].translation).find(
@@ -131,11 +139,42 @@ function MainTabs() {
 
 function MainStack() {
   const { isLoggedIn } = useAuth();
+  const { t } = useTranslation();
+  const [showSplash, setShowSplash] = React.useState(true);
+  const [loading, setLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    const checkFirstLaunch = async () => {
+      try {
+        const splashSeen = await AsyncStorage.getItem("splashShown");
+        if (!splashSeen) {
+          setShowSplash(true);
+        }
+      } catch (e) {
+        console.error("Ошибка чтения splashShown", e);
+      } finally {
+        setLoading(false);
+      }
+    };
+    checkFirstLaunch();
+  }, []);
+
+  const handleSplashEnd = async () => {
+    await AsyncStorage.setItem("splashShown", "true");
+    setShowSplash(false);
+  };
+
+  if (loading) return null;
+
+  if (showSplash) {
+    return <SplashScreen onEnd={handleSplashEnd} />;
+  }
+
   return (
-    <Stack.Navigator>
+    <Stack.Navigator screenOptions={{ headerShown: true }}>
       {isLoggedIn ? (
         <Stack.Screen
-          name="Назад"
+          name="MainTabs"
           component={MainTabs}
           options={{ headerShown: false }}
         />
@@ -146,35 +185,48 @@ function MainStack() {
           options={{ headerShown: false }}
         />
       )}
-      <Stack.Screen
-        name="StoryScreen"
-        component={StoryScreen}
-        options={{ headerShown: false }}
-      />
+
+      {/* Остальные экраны */}
+      <Stack.Screen name="StoryScreen" component={StoryScreen} />
       <Stack.Screen
         name="EditScreen"
         component={EditScreen}
-        options={{ title: "Редактировать профиль" }}
+        options={{ title: "Редактировать профиль", headerBackTitle: "Назад" }}
+      />
+      <Stack.Screen
+        name="TipDetail"
+        component={TipDetailScreen}
+        options={{ title: t("Советы"), headerBackTitle: "Назад" }}
       />
       <Stack.Screen
         name="TicketPurchase"
         component={TicketPurchaseScreen}
-        options={{ headerShown: true, title: "Покупка билета" }}
+        options={{
+          headerShown: true,
+          title: t("Покупка билета"),
+          headerBackTitle: "Назад",
+        }}
       />
       <Stack.Screen
-        name="Уведомления"
+        name="NotificationSettingsScreen"
         component={NotificationSettingsScreen}
-        options={{ headerShown: false }}
+        options={{
+          title: t("Уведомления"),
+          headerBackTitle: "Назад",
+        }}
       />
       <Stack.Screen
         name="Все услуги"
         component={AllServicesScreen}
-        options={{ title: "Все услуги" }}
+        options={{ title: t("Все услуги"), headerBackTitle: "Назад" }}
       />
       <Stack.Screen
         name="EcoTravel"
         component={EcoTravelScreen}
-        options={{ title: "Экологические путешествия" }}
+        options={{
+          title: "Экологические путешествия",
+          headerBackTitle: "Назад",
+        }}
       />
       <Stack.Screen
         name="АрендаМашин"
@@ -183,52 +235,117 @@ function MainStack() {
       />
       <Stack.Screen
         name="БронированиеОтеля"
-        component={HotelListScreen} // Устанавливаем HotelListScreen как первый экран бронирования
+        component={HotelListScreen}
         options={{ title: "Бронирование отелей" }}
       />
       <Stack.Screen
         name="HotelDetails"
-        component={HotelDetailsScreen} // Экран деталей отеля
+        component={HotelDetailsScreen}
         options={{ title: "Детали отеля" }}
       />
       <Stack.Screen
         name="BookingScreen"
-        component={HotelBookingScreen} // Экран бронирования
+        component={HotelBookingScreen}
         options={{ title: "Бронирование" }}
       />
       <Stack.Screen
+        name="TaxiTransportScreen"
+        component={TaxiTransportScreen}
+        options={{ title: t("Такси и транспорт"), headerBackTitle: "Назад" }}
+      />
+
+      <Stack.Screen
         name="ShopsScreen"
         component={ShopsScreen}
-        options={{ title: "Магазины" }}
+        options={{ title: t("Магазины"), headerBackTitle: "Назад" }}
       />
       <Stack.Screen
         name="CafesScreen"
         component={CafesScreen}
-        options={{ title: "Кафе" }}
+        options={{ title: t("Кафе"), headerBackTitle: "Назад" }}
       />
       <Stack.Screen
         name="InfoScreen"
         component={InfoScreen}
-        options={{ title: "Информация" }}
+        options={{ title: t("Информация"), headerBackTitle: "Назад" }}
       />
     </Stack.Navigator>
   );
 }
+
 function MainDrawer() {
+  const { t } = useTranslation(); // Вынес `t()` сюда
+
   return (
     <Drawer.Navigator>
       <Drawer.Screen
         name="Главная"
         component={MainStack}
-        options={{ headerShown: false }}
+        options={{ headerShown: false, title: t("Главная") }}
       />
-      <Drawer.Screen name="Мой профиль" component={ProfileScreen} />
-      <Drawer.Screen name="Настройки профиля" component={ProfileSettings} />
-      <Drawer.Screen name="Мой билет" component={MyTicketScreen} />
-      <Drawer.Screen name="История Поездок" component={MyTicketScreen} />
       <Drawer.Screen
-        name="Уведомления"
-        component={NotificationSettingsScreen}
+        name="Мой профиль"
+        component={ProfileScreen}
+        options={{
+          title: t("Мой профиль"),
+          headerLeft: ({ navigation }) => (
+            <Ionicons
+              name="menu-outline"
+              size={24}
+              color="black"
+              style={{ marginLeft: 15 }}
+              onPress={() => navigation.openDrawer()}
+            />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="История Поездок"
+        component={TripHistoryScreen}
+        options={{
+          title: t("История Поездок"),
+          headerLeft: ({ navigation }) => (
+            <Ionicons
+              name="menu-outline"
+              size={24}
+              color="black"
+              style={{ marginLeft: 15 }}
+              onPress={() => navigation.openDrawer()}
+            />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="Предстоящие поездки"
+        component={MyTicketScreen}
+        options={{
+          title: t("Предстоящие поездки"),
+          headerLeft: ({ navigation }) => (
+            <Ionicons
+              name="menu-outline"
+              size={24}
+              color="black"
+              style={{ marginLeft: 15 }}
+              onPress={() => navigation.openDrawer()}
+            />
+          ),
+        }}
+      />
+      <Drawer.Screen
+        name="Настройки профиля"
+        component={ProfileSettings}
+        options={{
+          title: t("Настройки профиля"),
+          headerLeft: ({ navigation }) => (
+            <Ionicons
+              name="menu-outline"
+              size={24}
+              color="black"
+              style={{ marginLeft: 15 }}
+              onPress={() => navigation.openDrawer()}
+            />
+          ),
+        }}
       />
     </Drawer.Navigator>
   );
@@ -276,7 +393,7 @@ export default function App() {
             })}
           />
           <Drawer.Screen
-            name={t("Мой билет")}
+            name={t("Предстоящие поездки")}
             component={MyTicketScreen}
             options={({ navigation }) => ({
               headerLeft: () => (

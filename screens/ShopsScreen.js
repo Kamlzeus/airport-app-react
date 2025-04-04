@@ -1,73 +1,58 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
   FlatList,
   TouchableOpacity,
-  Image,
   TextInput,
   StyleSheet,
   ScrollView,
 } from "react-native";
 import { useTranslation } from "react-i18next";
+import axios from "axios";
 
 const ShopsScreen = () => {
   const { t } = useTranslation();
   const [searchQuery, setSearchQuery] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState(t("Все"));
+  const [selectedCategory, setSelectedCategory] = useState("all");
+  const [shops, setShops] = useState([]);
 
-  // Данные о магазинах (перемещены выше)
-  const shopsData = [
-    {
-      id: "1",
-      name: "DutyFree",
-      category: t("Duty-free"),
-    },
-    {
-      id: "2",
-      name: "Erke",
-      category: t("Ювелирка"),
-    },
-    {
-      id: "3",
-      name: "Алтын сандык",
-      category: t("Сувениры"),
-    },
-    {
-      id: "4",
-      name: "Shine",
-      category: t("Ювелирка"),
-    },
-    {
-      id: "5",
-      name: "Nomad",
-      category: t("Сувениры"),
-    },
-    {
-      id: "6",
-      name: "Beeline",
-      category: t("SIM-card"),
-    },
-  ];
+  const categoryLabels = {
+    all: t("Все"),
+    jewelry: t("Ювелирка"),
+    dutyfree: t("Duty-free"),
+    souvenirs: t("Сувениры"),
+    simcard: t("SIM-card"),
+  };
 
-  const categories = [
-    t("Все"),
-    t("Ювелирка"),
-    t("Duty-free"),
-    t("Сувениры"),
-    t("SIM-card"),
-  ];
+  const categories = ["all", "jewelry", "dutyfree", "souvenirs", "simcard"];
 
-  // Фильтрация магазинов
-  const filteredShops = shopsData.filter(
-    (shop) =>
-      (selectedCategory === t("Все") || shop.category === selectedCategory) &&
-      shop.name.toLowerCase().includes(searchQuery.toLowerCase())
-  );
+  useEffect(() => {
+    fetchShops();
+  }, []);
+
+  const fetchShops = async () => {
+    try {
+      const response = await axios.get(
+        "http://172.19.226.109:8000/api/services/"
+      );
+      setShops(response.data);
+    } catch (error) {
+      console.error("Ошибка загрузки магазинов:", error);
+    }
+  };
+
+  const filteredShops = shops.filter((shop) => {
+    const matchesCategory =
+      selectedCategory === "all" || shop.service_type === selectedCategory;
+    const matchesSearch = shop.name
+      .toLowerCase()
+      .includes(searchQuery.toLowerCase());
+    return matchesCategory && matchesSearch;
+  });
 
   return (
     <View style={styles.container}>
-      {/* Поиск */}
       <TextInput
         placeholder={t("Поиск магазинов...")}
         style={styles.searchInput}
@@ -75,37 +60,35 @@ const ShopsScreen = () => {
         onChangeText={setSearchQuery}
       />
 
-      {/* Категории */}
       <ScrollView
         horizontal
         showsHorizontalScrollIndicator={false}
         contentContainerStyle={styles.categoryContainer}
       >
-        {categories.map((category) => (
+        {categories.map((categoryKey) => (
           <TouchableOpacity
-            key={category}
-            onPress={() => setSelectedCategory(category)}
+            key={categoryKey}
+            onPress={() => setSelectedCategory(categoryKey)}
             style={[
               styles.filterButton,
-              selectedCategory === category && styles.selectedFilterButton,
+              selectedCategory === categoryKey && styles.selectedFilterButton,
             ]}
           >
             <Text
               style={[
                 styles.filterText,
-                selectedCategory === category && styles.selectedFilterText,
+                selectedCategory === categoryKey && styles.selectedFilterText,
               ]}
             >
-              {category} {/* Убрали повторный вызов t() */}
+              {categoryLabels[categoryKey]}
             </Text>
           </TouchableOpacity>
         ))}
       </ScrollView>
 
-      {/* Список магазинов */}
       <FlatList
         data={filteredShops}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item.id.toString()}
         numColumns={2}
         contentContainerStyle={styles.gridContainer}
         renderItem={({ item }) => (

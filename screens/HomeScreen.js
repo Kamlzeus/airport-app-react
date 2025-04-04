@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -16,11 +16,29 @@ import { useNavigation } from "@react-navigation/native";
 import { Linking } from "react-native";
 import { useTranslation } from "react-i18next";
 import LanguageSwitcher from "../LanguageSwitcher";
+import axios from "axios";
 
 const HomeScreen = () => {
   const { t } = useTranslation();
   const navigation = useNavigation();
   const [searchQuery, setSearchQuery] = useState("");
+  const [tips, setTips] = useState([]);
+
+  useEffect(() => {
+    fetchTips();
+  }, []);
+
+  const fetchTips = async () => {
+    try {
+      const response = await axios.get(
+        "http://172.19.226.109:8000/api/info-banners/"
+      );
+      setTips(response.data);
+    } catch (error) {
+      console.error("Ошибка загрузки советов:", error);
+      Alert.alert(t("Ошибка"), t("Не удалось загрузить советы."));
+    }
+  };
 
   const services = [
     {
@@ -40,27 +58,6 @@ const HomeScreen = () => {
       name: t("Информация"),
       image: require("../assets/square-info.png"),
       screen: "InfoScreen",
-    },
-  ];
-
-  const tips = [
-    {
-      title: t("Багаж"),
-      description: t(
-        "Вещи которые можно перевозить в багаже, ручной клади. Вес багажа и ручной клади."
-      ),
-    },
-    {
-      title: t("Документы"),
-      description: t(
-        "Нужные документы для перелетов во внутренних рейсах, визовые  данные для пересечения границ."
-      ),
-    },
-    {
-      title: t("Регистрация"),
-      description: t(
-        "Регистрация на рейсы, время для прибытие в аэропорт, расписание когда заканчивается регистрация"
-      ),
     },
   ];
 
@@ -101,7 +98,7 @@ const HomeScreen = () => {
           {/* Поиск */}
           <View style={styles.topSection}>
             <TouchableOpacity
-              onPress={() => navigation.navigate("Уведомления")}
+              onPress={() => navigation.navigate("NotificationSettingsScreen")}
               style={styles.notificationContainer}
             >
               <Image
@@ -183,8 +180,10 @@ const HomeScreen = () => {
               <TouchableOpacity
                 key={index}
                 onPress={() =>
-                  navigation.navigate("InfoScreen", {
-                    selectedTopic: tip.title, // Передаем заголовок
+                  navigation.navigate("TipDetail", {
+                    title: tip.title,
+                    content: tip.content,
+                    image: tip.image,
                   })
                 }
               >
@@ -194,8 +193,10 @@ const HomeScreen = () => {
                   end={{ x: 1, y: 0 }}
                   style={styles.tipCard}
                 >
-                  <Text style={styles.tipTitle}>{tip.title}</Text>
-                  <Text style={styles.tipDescription}>{tip.description}</Text>
+                  <Text style={styles.tipTitle}>{t(tip.title)}</Text>
+                  <Text style={styles.tipDescription}>
+                    {t(tip.description)}
+                  </Text>
                 </LinearGradient>
               </TouchableOpacity>
             ))}
@@ -269,7 +270,7 @@ const styles = StyleSheet.create({
   },
   services: {
     flexDirection: "row",
-    paddingVertical: 20,
+    paddingVertical: 30,
   },
   serviceButton: {
     alignItems: "center",
@@ -284,7 +285,7 @@ const styles = StyleSheet.create({
   serviceIcon: {
     width: 50,
     height: 50,
-    marginBottom: 5,
+    marginBottom: 10,
     tintColor: "#00609E", // Расстояние между иконкой и текстом
   },
   serviceText: {

@@ -194,12 +194,14 @@ const flightsData = [
   },
 ];
 
-const classOptions = ["Эконом", "Бизнес", "Первый класс"];
-const passengerOptions = [1, 2, 3, 4, 5, 6];
+
 
 const TicketsScreen = () => {
   const navigation = useNavigation();
   const { t } = useTranslation();
+
+  const classOptions = [t("Эконом"), t("Бизнес"), t("Первый класс")];
+  const passengerOptions = [1, 2, 3, 4, 5, 6];
 
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
@@ -237,7 +239,8 @@ const TicketsScreen = () => {
         flight.from === from && flight.to === to && flight.class === classType
     );
     if (results.length === 0) {
-      Alert.alert("Рейсов не найдено", "Попробуйте изменить параметры поиска.");
+      Alert.alert(t("Рейсов не найдено"), t("Попробуйте изменить параметры поиска."));
+
     }
 
     setFilteredFlights(results);
@@ -363,7 +366,7 @@ const TicketsScreen = () => {
           </View>
         </View>
         <TouchableOpacity style={styles.searchButton} onPress={searchTickets}>
-          <Text style={styles.searchButtonText}>Найти билеты</Text>
+        <Text style={styles.searchButtonText}>{t("Найти билеты")}</Text>
         </TouchableOpacity>
         {showFlights && (
           <View style={styles.flightsContainer}>
@@ -406,6 +409,8 @@ const TicketsScreen = () => {
                   style={styles.modalItem}
                   onPress={() => {
                     setPassengers(num);
+                    setShowPassengersModal(false);
+                    setClassType(cls); // Сохраняем оригинальное значение
                     setShowPassengersModal(false);
                   }}
                 >

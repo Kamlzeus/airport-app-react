@@ -9,25 +9,28 @@ import {
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
+import { useTranslation } from "react-i18next";
 
 const MyTicketScreen = () => {
+  const { t } = useTranslation(); // Подключаем перевод
+
   const flight = {
     airlineLogo:
       "https://companieslogo.com/img/orig/THYAO.IS-f22d40e8.png?t=1720244494",
     airlineName: "Turkish Airlines",
     ticketNumber: "Boeing 777",
-    from: "Манас (FRU)",
-    to: "Стамбул (IST)",
+    from: t("Манас (FRU)"),
+    to: t("Стамбул (IST)"),
     departureTime: "10:30",
-    departureDate: "12 Марта",
+    departureDate: t("12 Марта"),
     arrivalTime: "14:50",
-    arrivalDate: "12 Марта",
+    arrivalDate: t("12 Марта"),
     duration: "4ч 20м",
     terminal: "1",
     gate: "B12",
     checkInDesk: "D3",
-    exit: "Gate 5",
-    status: "Ожидается",
+    exit: t("Выход") + ": Gate 5",
+    status: t("Ожидается"),
   };
 
   return (
@@ -51,7 +54,7 @@ const MyTicketScreen = () => {
 
             {/* № Билета */}
             <Text style={styles.ticketNumber}>
-              № билета: {flight.ticketNumber}
+              {t("№ билета")}: {flight.ticketNumber}
             </Text>
 
             {/* Линия-разделитель */}
@@ -67,16 +70,22 @@ const MyTicketScreen = () => {
             {/* Вылет и прилёт */}
             <View style={styles.flightInfoContainer}>
               <View style={[styles.flightBox, styles.darkBlueBox]}>
-                <Text style={styles.boxTitle}>Вылет</Text>
+                <Text style={styles.boxTitle}>{t("Вылет")}</Text>
                 <Text style={styles.boxText}>
-                  Время: {flight.departureTime}
+                  {t("Время")}: {flight.departureTime}
                 </Text>
-                <Text style={styles.boxText}>Дата: {flight.departureDate}</Text>
+                <Text style={styles.boxText}>
+                  {t("Дата")}: {flight.departureDate}
+                </Text>
               </View>
               <View style={[styles.flightBox, styles.blueBox]}>
-                <Text style={styles.boxTitle}>Прилёт</Text>
-                <Text style={styles.boxText}>Время: {flight.arrivalTime}</Text>
-                <Text style={styles.boxText}>Дата: {flight.arrivalDate}</Text>
+                <Text style={styles.boxTitle}>{t("Прилёт")}</Text>
+                <Text style={styles.boxText}>
+                  {t("Время")}: {flight.arrivalTime}
+                </Text>
+                <Text style={styles.boxText}>
+                  {t("Дата")}: {flight.arrivalDate}
+                </Text>
               </View>
             </View>
 
@@ -84,12 +93,12 @@ const MyTicketScreen = () => {
             <View style={styles.extraInfoContainer}>
               <View style={styles.extraInfoBox}>
                 <Ionicons name="exit-outline" size={20} color="gray" />
-                <Text style={styles.extraText}>Выход: {flight.exit}</Text>
+                <Text style={styles.extraText}>{flight.exit}</Text>
               </View>
               <View style={styles.extraInfoBox}>
                 <Ionicons name="clipboard-outline" size={20} color="gray" />
                 <Text style={styles.extraText}>
-                  Стойка регистрации: {flight.checkInDesk}
+                  {t("Стойка регистрации")}: {flight.checkInDesk}
                 </Text>
               </View>
               <View style={styles.extraInfoBox}>
@@ -98,7 +107,9 @@ const MyTicketScreen = () => {
                   size={20}
                   color="gray"
                 />
-                <Text style={styles.extraText}>Статус: {flight.status}</Text>
+                <Text style={styles.extraText}>
+                  {t("Статус")}: {flight.status}
+                </Text>
               </View>
             </View>
           </View>

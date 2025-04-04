@@ -9,11 +9,13 @@ import {
   Image,
 } from "react-native";
 import { useTranslation } from "react-i18next";
+import { useNavigation } from "@react-navigation/native";
 
 const AllServicesScreen = () => {
   const { t } = useTranslation();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("Все");
+  const navigation = useNavigation();
 
   const services = [
     {
@@ -21,24 +23,28 @@ const AllServicesScreen = () => {
       name: t("Такси и Транспорт"),
       category: t("Такси"),
       image: require("../assets/taxi-bus.png"),
+      screen: "TaxiTransportScreen",
     },
     {
       id: 2,
       name: t("Магазины"),
       category: t("Шопинг"),
       image: require("../assets/store-alt-5.png"),
+      screen: "ShopsScreen",
     },
     {
       id: 3,
       name: t("Кафе"),
       category: t("Еда"),
       image: require("../assets/restaurant.png"),
+      screen: "CafesScreen",
     },
     {
       id: 4,
       name: t("Информация"),
       category: t("Инфо"),
       image: require("../assets/square-info.png"),
+      screen: "InfoScreen",
     },
   ];
 
@@ -84,7 +90,11 @@ const AllServicesScreen = () => {
 
       <ScrollView contentContainerStyle={styles.servicesList}>
         {filteredServices.map((service) => (
-          <TouchableOpacity key={service.id} style={styles.serviceItem}>
+          <TouchableOpacity
+            key={service.id}
+            style={styles.serviceItem}
+            onPress={() => navigation.navigate(service.screen)}
+          >
             <Image source={service.image} style={styles.serviceImage} />
             <Text style={styles.serviceName}>{service.name}</Text>
           </TouchableOpacity>
