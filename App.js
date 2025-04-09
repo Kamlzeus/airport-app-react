@@ -38,6 +38,8 @@ import InfoScreen from "./screens/InfoScreen";
 import TripHistoryScreen from "./screens/TripHistoryScreen";
 import SplashScreen from "./screens/SplashScreen";
 import TipDetailScreen from "./screens/TipDetailScreen";
+import ShopDetailsScreen from "./screens/ShopDetailsScreen";
+import CafeDetailsScreen from "./screens/CafeDetailsScreen";
 
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
@@ -187,7 +189,13 @@ function MainStack() {
       )}
 
       {/* Остальные экраны */}
-      <Stack.Screen name="StoryScreen" component={StoryScreen} />
+      <Stack.Screen
+        name="StoryScreen"
+        component={StoryScreen}
+        options={{ headerShown: false }}
+      />
+      <Stack.Screen name="CafeDetails" component={CafeDetailsScreen} />
+      <Stack.Screen name="ShopDetails" component={ShopDetailsScreen} />
       <Stack.Screen
         name="EditScreen"
         component={EditScreen}

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -7,79 +7,123 @@ import {
   ScrollView,
   StyleSheet,
   StatusBar,
+  Dimensions,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
 import { useTranslation } from "react-i18next";
+import RenderHTML from "react-native-render-html";
+import axios from "axios";
+import { useWindowDimensions } from "react-native";
 
+const tagsStyles = {
+  h2: {
+    fontSize: 24,
+    fontWeight: "bold",
+    marginBottom: 10,
+    color: "#1a1a1a",
+  },
+  h3: {
+    fontSize: 20,
+    fontWeight: "600",
+    marginVertical: 10,
+    color: "#333",
+  },
+  p: {
+    fontSize: 16,
+    lineHeight: 24,
+    color: "#444",
+    marginBottom: 8,
+  },
+  li: {
+    fontSize: 16,
+    lineHeight: 24,
+    marginBottom: 6,
+    color: "#444",
+  },
+  strong: {
+    fontWeight: "bold",
+    color: "#000",
+  },
+  ul: {
+    paddingLeft: 20,
+    marginBottom: 10,
+  },
+  ol: {
+    paddingLeft: 20,
+    marginBottom: 10,
+  },
+  img: {
+    width: "100%",
+    height: "auto",
+    marginBottom: 10,
+  },
+};
 const InfoScreen = () => {
-  const [selectedTopic, setSelectedTopic] = useState(null);
-  const { t } = useTranslation();
+  const [sections, setSections] = useState([]);
+  const [selectedSection, setSelectedSection] = useState(null);
+  const { t, i18n } = useTranslation();
+  const { width } = useWindowDimensions();
 
-  const topics = [
-    "📄 Документы",
-    "🛫 Регистрация",
-    "🛄 Багаж",
-    "🐾 Перевозка животных",
-    "🎒 Утеря багажа",
-    "🚖 Транспорт",
-    "🌱 Углеродный след",
-  ];
+  useEffect(() => {
+    axios
+      .get("http://192.168.68.102:8000/api/info-sections/")
+      .then((res) => {
+        setSections(res.data);
+      })
+      .catch((err) => console.error("Error loading info:", err));
+  }, []);
 
-  const getContentKey = (topic) => {
-    switch (topic) {
-      case "📄 Документы":
-        return "documents_text";
-      case "🛫 Регистрация":
-        return "checkin_text";
-      case "🛄 Багаж":
-        return "baggage_text";
-      case "🐾 Перевозка животных":
-        return "pet_transport_text";
-      case "🎒 Утеря багажа":
-        return "lost_baggage_text";
-      case "🚖 Транспорт":
-        return "transport_text";
-      case "🌱 Углеродный след":
-        return "carbon_footprint_text";
-      default:
-        return "";
-    }
+  const getLocalizedText = (section, field) => {
+    const lang = i18n.language;
+    return lang === "en" ? section[`${field}_en`] : section[`${field}_ru`];
   };
 
   return (
     <View style={styles.container}>
       <StatusBar barStyle="dark-content" />
       <ScrollView contentContainerStyle={styles.scrollContainer}>
-        {topics.map((topic) => (
+        {sections.map((section) => (
           <TouchableOpacity
-            key={topic}
+            key={section.id}
             style={styles.button}
-            onPress={() => setSelectedTopic(topic)}
+            onPress={() => setSelectedSection(section)}
           >
             <LinearGradient
               colors={["#ffffff", "#cfd9df"]}
               style={styles.gradientButton}
             >
-              <Text style={styles.buttonText}>{t(topic)}</Text>
+              <Text style={styles.buttonText}>
+                {getLocalizedText(section, "title")}
+              </Text>
               <Ionicons name="chevron-forward" size={22} color="black" />
             </LinearGradient>
           </TouchableOpacity>
         ))}
       </ScrollView>
 
-      <Modal visible={selectedTopic !== null} animationType="slide">
+      <Modal visible={!!selectedSection} animationType="slide">
         <View style={styles.modalContainer}>
           <ScrollView style={styles.modalContent}>
-            <Text style={styles.modalHeader}>{t(selectedTopic)}</Text>
-            <Text style={styles.modalText}>
-              {t(getContentKey(selectedTopic))}
-            </Text>
+            {selectedSection && (
+              <>
+                <Text style={styles.modalHeader}>
+                  {getLocalizedText(selectedSection, "title")}
+                </Text>
+                <RenderHTML
+                  contentWidth={width - 40}
+                  source={{
+                    html: getLocalizedText(selectedSection, "content"),
+                  }}
+                  tagsStyles={tagsStyles}
+                />
+              </>
+            )}
           </ScrollView>
 
           <TouchableOpacity
             style={styles.closeButton}
-            onPress={() => setSelectedTopic(null)}
+            onPress={() => setSelectedSection(null)}
           >
             <Text style={styles.closeButtonText}>{t("Закрыть")}</Text>
           </TouchableOpacity>
@@ -130,10 +174,11 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   modalHeader: {
-    fontSize: 26,
+    fontSize: 20,
     fontWeight: "bold",
     marginBottom: 15,
     color: "black",
+    textAlign: "center",
   },
   modalText: {
     fontSize: 18,

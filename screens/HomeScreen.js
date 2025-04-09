@@ -31,7 +31,7 @@ const HomeScreen = () => {
   const fetchTips = async () => {
     try {
       const response = await axios.get(
-        "http://172.19.226.109:8000/api/info-banners/"
+        "http://192.168.68.102:8000/api/info-banners/"
       );
       setTips(response.data);
     } catch (error) {
@@ -59,6 +59,14 @@ const HomeScreen = () => {
       image: require("../assets/square-info.png"),
       screen: "InfoScreen",
     },
+  ];
+  const stories = [
+    { id: 1, title: "Добро пожаловать!", image: require("../assets/TSI.jpg") },
+    { id: 2, title: "Новые услуги", image: require("../assets/Reklama.png") },
+    { id: 3, title: "Скидки на рейсы", image: require("../assets/TSI.jpg") },
+    { id: 4, title: "Регистрация!", image: require("../assets/Auca.jpg") },
+    { id: 5, title: "Новые услуги", image: require("../assets/Reklama.png") },
+    { id: 6, title: "Регистрация!", image: require("../assets/Auca.jpg") },
   ];
 
   // Фильтруем услуги по запросу
@@ -94,6 +102,29 @@ const HomeScreen = () => {
             />
             <Text style={styles.title}>{t("Добрый день!")}</Text>
           </View>
+
+          {/* Сторис */}
+          <ScrollView
+            horizontal
+            contentContainerStyle={styles.storiesContainer}
+            showsHorizontalScrollIndicator={false}
+          >
+            {stories.map((story, index) => (
+              <TouchableOpacity
+                key={story.id}
+                onPress={() =>
+                  navigation.navigate("StoryScreen", {
+                    storyIndex: index,
+                    stories,
+                  })
+                }
+              >
+                <View style={styles.storyCircle}>
+                  <Image source={story.image} style={styles.storyImage} />
+                </View>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
 
           {/* Поиск */}
           <View style={styles.topSection}>
@@ -231,10 +262,29 @@ const styles = StyleSheet.create({
     flex: 1,
     textAlign: "center",
   },
+  storiesContainer: {
+    flexDirection: "row",
+    marginTop: 10,
+    marginBottom: 5,
+  },
+  storyCircle: {
+    width: 70,
+    height: 70,
+    borderRadius: 35,
+    overflow: "hidden",
+    marginHorizontal: 5,
+    borderWidth: 2,
+    borderColor: "rgba(0, 150, 255, 0.8)",
+  },
+  storyImage: {
+    width: "100%",
+    height: "100%",
+    resizeMode: "cover",
+  },
   topSection: {
     flexDirection: "row",
     alignItems: "center",
-    marginVertical: 50,
+    marginVertical: 20,
   },
   notificationContainer: {
     width: 50,

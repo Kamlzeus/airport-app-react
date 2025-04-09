@@ -7,26 +7,80 @@ import {
   ScrollView,
   TouchableOpacity,
   Image,
+  ImageBackground,
 } from "react-native";
+import { LinearGradient } from "expo-linear-gradient";
 import { useTranslation } from "react-i18next";
+import { useNavigation } from "@react-navigation/native";
 
 const CafesScreen = () => {
   const { t } = useTranslation();
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState(t("Все"));
+  const navigation = useNavigation();
 
   const categories = [t("Все"), t("Кофейня"), t("Кафе")];
 
   const cafes = [
-    { id: 1, name: "Adriano", category: t("Кофейня") },
-    { id: 2, name: t("Долина вкуса"), category: t("Кафе") },
-    { id: 3, name: "Tucano Coffee", category: t("Кофейня") },
-    { id: 4, name: "Bruno coffee & Tea room", category: t("Кафе") },
-    { id: 5, name: "Sky Bar", category: t("Кофейня") },
+    {
+      id: 1,
+      name: "Adriano",
+      category: "Кофейня",
+      description:
+        "Кофейня в минималистичном стиле с авторскими напитками и уютной атмосферой.",
+      location: "Зона ожидания, 1 этаж",
+      open_time: "07:00",
+      close_time: "21:00",
+    },
+    {
+      id: 2,
+      name: "Долина вкуса",
+      category: "Кафе",
+      description:
+        "Уютное кафе с домашней кухней. Отлично подходит для обеда в спокойной обстановке.",
+      location: "Зона прилёта, 1 этаж",
+      open_time: "08:00",
+      close_time: "20:00",
+    },
+    {
+      id: 3,
+      name: "Tucano Coffee",
+      category: "Кофейня",
+      description:
+        "Брендовая кофейня с фирменными напитками и десертами. Есть места у окна.",
+      location: "Зона регистрации, рядом с входом №2",
+      open_time: "06:00",
+      close_time: "22:00",
+    },
+    {
+      id: 4,
+      name: "Bruno coffee & Tea room",
+      category: "Кафе",
+      description:
+        "Стильное кафе с богатым выбором чая, кофе и закусок. Подходит для работы и отдыха.",
+      location: "2 этаж, рядом с эскалатором",
+      open_time: "09:00",
+      close_time: "21:00",
+    },
+    {
+      id: 5,
+      name: "Sky Bar",
+      category: "Кофейня",
+      description:
+        "Бар-кофейня с панорамным видом. Идеально для утреннего кофе или вечернего коктейля.",
+      location: "3 этаж, панорамная зона отдыха",
+      open_time: "10:00",
+      close_time: "00:00",
+    },
     {
       id: 6,
       name: "Sierra",
-      category: t("Кофейня"),
+      category: "Кофейня",
+      description:
+        "Современная кофейня с видом на взлётную полосу. Отличный выбор напитков и десертов.",
+      location: "2 этаж, зона вылета",
+      open_time: "06:00",
+      close_time: "23:00",
       image: require("../assets/sierra.jpeg"),
     },
   ];
@@ -38,72 +92,96 @@ const CafesScreen = () => {
   );
 
   return (
-    <View style={styles.container}>
-      {/* Поисковик */}
-      <TextInput
-        placeholder={t("Поиск кафе...")}
-        style={styles.searchInput}
-        value={searchQuery}
-        onChangeText={setSearchQuery}
-      />
+    <ImageBackground
+      source={{
+        uri: "https://triptokyrgyzstan.com/sites/default/files/styles/hero/public/images/2019-04/slide-1960x857-07.jpg.webp?itok=PMx4TeLB",
+      }}
+      style={styles.imageBackground}
+      resizeMode="cover"
+    >
+      <LinearGradient
+        colors={["rgba(0, 150, 255, 0.6)", "rgba(255, 255, 255, 1)"]}
+        style={styles.gradient}
+      >
+        <View style={styles.container}>
+          {/* Поиск */}
+          <TextInput
+            placeholder={t("Поиск кафе...")}
+            style={styles.searchInput}
+            value={searchQuery}
+            onChangeText={setSearchQuery}
+          />
 
-      {/* Фильтры категорий */}
-      <View style={styles.categoriesWrapper}>
-        <ScrollView
-          horizontal
-          showsHorizontalScrollIndicator={false}
-          contentContainerStyle={styles.categoriesContainer}
-        >
-          {categories.map((category) => (
-            <TouchableOpacity
-              key={category}
-              onPress={() => setSelectedCategory(category)}
-              style={[
-                styles.filterButton,
-                selectedCategory === category && styles.selectedFilterButton,
-              ]}
+          {/* Категории */}
+          <View style={styles.categoriesWrapper}>
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={styles.categoriesContainer}
             >
-              <Text
-                style={[
-                  styles.filterText,
-                  selectedCategory === category && styles.selectedFilterText,
-                ]}
-              >
-                {category}
-              </Text>
-            </TouchableOpacity>
-          ))}
-        </ScrollView>
-      </View>
+              {categories.map((category) => (
+                <TouchableOpacity
+                  key={category}
+                  onPress={() => setSelectedCategory(category)}
+                  style={[
+                    styles.filterButton,
+                    selectedCategory === category &&
+                      styles.selectedFilterButton,
+                  ]}
+                >
+                  <Text
+                    style={[
+                      styles.filterText,
+                      selectedCategory === category &&
+                        styles.selectedFilterText,
+                    ]}
+                  >
+                    {category}
+                  </Text>
+                </TouchableOpacity>
+              ))}
+            </ScrollView>
+          </View>
 
-      {/* Список кафе */}
-      <ScrollView contentContainerStyle={styles.cafesList}>
-        {filteredCafes.map((cafe) => (
-          <TouchableOpacity key={cafe.id} style={styles.cafeItem}>
-            {cafe.image && (
-              <Image source={cafe.image} style={styles.cafeImage} />
-            )}
-            <Text style={styles.cafeName}>{cafe.name}</Text>
-          </TouchableOpacity>
-        ))}
-      </ScrollView>
-    </View>
+          {/* Кафе */}
+          <ScrollView contentContainerStyle={styles.cafesList}>
+            {filteredCafes.map((cafe) => (
+              <TouchableOpacity
+                key={cafe.id}
+                style={styles.cafeItem}
+                onPress={() => navigation.navigate("CafeDetails", { cafe })}
+              >
+                {cafe.image && (
+                  <Image source={cafe.image} style={styles.cafeImage} />
+                )}
+                <Text style={styles.cafeName}>{cafe.name}</Text>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
+        </View>
+      </LinearGradient>
+    </ImageBackground>
   );
 };
 
 const styles = StyleSheet.create({
+  imageBackground: {
+    flex: 1,
+  },
+  gradient: {
+    flex: 1,
+    paddingTop: 50,
+  },
   container: {
     flex: 1,
-    padding: 20,
-    backgroundColor: "#f9f9f9",
+    paddingHorizontal: 20,
   },
   searchInput: {
-    marginTop: 10,
-    paddingHorizontal: 15,
+    marginBottom: 20,
     backgroundColor: "white",
     borderRadius: 25,
+    paddingHorizontal: 20,
     paddingVertical: 15,
-    marginBottom: 20,
     fontSize: 16,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
@@ -111,7 +189,7 @@ const styles = StyleSheet.create({
     shadowRadius: 6,
   },
   categoriesWrapper: {
-    alignItems: "center", // Центрируем категории
+    alignItems: "center",
     marginBottom: 20,
   },
   categoriesContainer: {
@@ -119,7 +197,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 5,
   },
   filterButton: {
-    paddingVertical: 5,
+    paddingVertical: 8,
     paddingHorizontal: 30,
     backgroundColor: "#f0f0f0",
     borderRadius: 15,
@@ -151,7 +229,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     backgroundColor: "white",
-    borderRadius: 12,
+    borderRadius: 15,
     margin: 10,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
@@ -161,13 +239,14 @@ const styles = StyleSheet.create({
   cafeImage: {
     width: 80,
     height: 80,
-    marginBottom: 5,
+    marginBottom: 8,
     borderRadius: 10,
   },
   cafeName: {
-    fontSize: 18,
-    fontWeight: "500",
+    fontSize: 16,
+    fontWeight: "bold",
     color: "#333",
+    textAlign: "center",
   },
 });
 
