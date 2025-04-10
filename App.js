@@ -40,7 +40,7 @@ import SplashScreen from "./screens/SplashScreen";
 import TipDetailScreen from "./screens/TipDetailScreen";
 import ShopDetailsScreen from "./screens/ShopDetailsScreen";
 import CafeDetailsScreen from "./screens/CafeDetailsScreen";
-
+import ChatScreen from "./screens/ChatScreen";
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -199,12 +199,15 @@ function MainStack() {
       <Stack.Screen
         name="EditScreen"
         component={EditScreen}
-        options={{ title: "Редактировать профиль", headerBackTitle: "Назад" }}
+        options={{
+          title: t("Редактировать профиль"),
+          headerBackTitle: t("Назад"),
+        }}
       />
       <Stack.Screen
         name="TipDetail"
         component={TipDetailScreen}
-        options={{ title: t("Советы"), headerBackTitle: "Назад" }}
+        options={{ title: t("Советы"), headerBackTitle: t("Назад") }}
       />
       <Stack.Screen
         name="TicketPurchase"
@@ -212,7 +215,7 @@ function MainStack() {
         options={{
           headerShown: true,
           title: t("Покупка билета"),
-          headerBackTitle: "Назад",
+          headerBackTitle: t("Назад"),
         }}
       />
       <Stack.Screen
@@ -220,20 +223,20 @@ function MainStack() {
         component={NotificationSettingsScreen}
         options={{
           title: t("Уведомления"),
-          headerBackTitle: "Назад",
+          headerBackTitle: t("Назад"),
         }}
       />
       <Stack.Screen
         name="Все услуги"
         component={AllServicesScreen}
-        options={{ title: t("Все услуги"), headerBackTitle: "Назад" }}
+        options={{ title: t("Все услуги"), headerBackTitle: t("Назад") }}
       />
       <Stack.Screen
         name="EcoTravel"
         component={EcoTravelScreen}
         options={{
           title: "Экологические путешествия",
-          headerBackTitle: "Назад",
+          headerBackTitle: t("Назад"),
         }}
       />
       <Stack.Screen
@@ -259,23 +262,28 @@ function MainStack() {
       <Stack.Screen
         name="TaxiTransportScreen"
         component={TaxiTransportScreen}
-        options={{ title: t("Такси и транспорт"), headerBackTitle: "Назад" }}
+        options={{ title: t("Такси"), headerBackTitle: t("Назад") }}
       />
 
       <Stack.Screen
         name="ShopsScreen"
         component={ShopsScreen}
-        options={{ title: t("Магазины"), headerBackTitle: "Назад" }}
+        options={{ title: t("Магазины"), headerBackTitle: t("Назад") }}
       />
       <Stack.Screen
         name="CafesScreen"
         component={CafesScreen}
-        options={{ title: t("Кафе"), headerBackTitle: "Назад" }}
+        options={{ title: t("Кафе"), headerBackTitle: t("Назад") }}
       />
       <Stack.Screen
         name="InfoScreen"
         component={InfoScreen}
-        options={{ title: t("Информация"), headerBackTitle: "Назад" }}
+        options={{ title: t("Информация"), headerBackTitle: t("Назад") }}
+      />
+      <Stack.Screen
+        name="Chat"
+        component={ChatScreen}
+        options={{ title: t("Чат-бот"), headerBackTitle: t("Назад") }}
       />
     </Stack.Navigator>
   );

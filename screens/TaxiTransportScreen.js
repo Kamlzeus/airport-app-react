@@ -19,7 +19,7 @@ const TaxiTransportScreen = () => {
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>{t("Такси и транспорт")}</Text>
+      <Text style={styles.title}>{t("Такси")}</Text>
       <Text style={styles.description}>
         {t("Здесь вы можете заказать такси до аэропорта")}
         {"\n"}

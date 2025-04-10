@@ -28,7 +28,7 @@ const flightsData = [
     id: "1",
     from: "Бишкек",
     to: "Ош",
-    date: "2025-03-10",
+    date: "2025-13-04",
     class: "Эконом",
     price: "$50",
   },
@@ -194,8 +194,6 @@ const flightsData = [
   },
 ];
 
-
-
 const TicketsScreen = () => {
   const navigation = useNavigation();
   const { t } = useTranslation();
@@ -239,8 +237,10 @@ const TicketsScreen = () => {
         flight.from === from && flight.to === to && flight.class === classType
     );
     if (results.length === 0) {
-      Alert.alert(t("Рейсов не найдено"), t("Попробуйте изменить параметры поиска."));
-
+      Alert.alert(
+        t("Рейсов не найдено"),
+        t("Попробуйте изменить параметры поиска.")
+      );
     }
 
     setFilteredFlights(results);
@@ -338,7 +338,11 @@ const TicketsScreen = () => {
                 onPress={() => setShowDatePicker(true)}
               >
                 <Ionicons name="calendar-outline" size={20} color="gray" />
-                <Text>{t("Выбрать даты")}</Text>
+                <Text>
+                  {departureDate
+                    ? departureDate.toLocaleDateString()
+                    : t("Выбрать даты")}
+                </Text>
               </TouchableOpacity>
 
               <TouchableOpacity
@@ -366,7 +370,7 @@ const TicketsScreen = () => {
           </View>
         </View>
         <TouchableOpacity style={styles.searchButton} onPress={searchTickets}>
-        <Text style={styles.searchButtonText}>{t("Найти билеты")}</Text>
+          <Text style={styles.searchButtonText}>{t("Найти билеты")}</Text>
         </TouchableOpacity>
         {showFlights && (
           <View style={styles.flightsContainer}>
@@ -409,8 +413,6 @@ const TicketsScreen = () => {
                   style={styles.modalItem}
                   onPress={() => {
                     setPassengers(num);
-                    setShowPassengersModal(false);
-                    setClassType(cls); // Сохраняем оригинальное значение
                     setShowPassengersModal(false);
                   }}
                 >

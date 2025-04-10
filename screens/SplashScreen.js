@@ -19,7 +19,7 @@ export default function SplashScreen({ onEnd }) {
     <View style={styles.container}>
       <Video
         ref={videoRef}
-        source={require("../assets/animkaaa.mp4")}
+        source={require("../assets/animeee.mp4")}
         style={styles.fullscreen}
         resizeMode="cover"
         shouldPlay

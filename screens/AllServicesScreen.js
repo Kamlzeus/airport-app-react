@@ -20,7 +20,7 @@ const AllServicesScreen = () => {
   const services = [
     {
       id: 1,
-      name: t("Такси и Транспорт"),
+      name: t("Такси"),
       category: t("Такси"),
       image: require("../assets/taxi-bus.png"),
       screen: "TaxiTransportScreen",

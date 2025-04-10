@@ -54,19 +54,6 @@ const MyProfileScreen = () => {
               </Text>
             </TouchableOpacity>
           </View>
-
-          {/* Баланс */}
-          <View style={styles.balanceCard}>
-            <View style={styles.balanceItem}>
-              <Text style={styles.balanceText}>{t("Баланс")}:</Text>
-              <Text style={styles.balanceValue}>{user.balance}</Text>
-            </View>
-            <View style={styles.divider} />
-            <View style={styles.balanceItem}>
-              <Text style={styles.balanceText}>{t("Бонусы")}:</Text>
-              <Text style={styles.balanceValue}>{user.bonuses}</Text>
-            </View>
-          </View>
         </ScrollView>
       </LinearGradient>
     </ImageBackground>
@@ -108,20 +95,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   editButtonText: { color: "white", fontSize: 16, marginLeft: 10 },
-  balanceCard: {
-    backgroundColor: "white",
-    width: "100%",
-    padding: 20,
-    borderRadius: 15,
-    marginTop: 20,
-    shadowOpacity: 0.3,
-    shadowRadius: 6,
-    elevation: 6,
-  },
-  balanceItem: { flexDirection: "row", justifyContent: "space-between" },
-  balanceText: { fontSize: 18, color: "gray" },
-  balanceValue: { fontSize: 18, fontWeight: "bold" },
-  divider: { height: 1, backgroundColor: "#ddd", marginVertical: 12 },
 });
 
 export default MyProfileScreen;

@@ -17,12 +17,15 @@ import { Linking } from "react-native";
 import { useTranslation } from "react-i18next";
 import LanguageSwitcher from "../LanguageSwitcher";
 import axios from "axios";
+import ChatBox from "../screens/ChatScreen"; // уже есть, если нет — см. предыдущий ответ
+import { Modal } from "react-native";
 
 const HomeScreen = () => {
   const { t } = useTranslation();
   const navigation = useNavigation();
   const [searchQuery, setSearchQuery] = useState("");
   const [tips, setTips] = useState([]);
+  const [isChatVisible, setIsChatVisible] = useState(false);
 
   useEffect(() => {
     fetchTips();
@@ -199,6 +202,18 @@ const HomeScreen = () => {
             >
               <Text style={styles.allServicesText}>{t("Все услуги")}</Text>
             </TouchableOpacity>
+
+            {/* Кнопка чата — абсолютная внутри этого блока */}
+            <TouchableOpacity
+              style={styles.chatButtonFixed}
+              onPress={() => navigation.navigate("Chat")}
+            >
+              <Ionicons
+                name="chatbubble-ellipses-outline"
+                size={24}
+                color="#fff"
+              />
+            </TouchableOpacity>
           </View>
 
           {/* Советы */}
@@ -344,18 +359,13 @@ const styles = StyleSheet.create({
     textAlign: "center",
   },
   centerButtonContainer: {
-    alignItems: "center",
+    width: "100%", // чтобы занять всю ширину
+    alignItems: "center", // по центру
     marginTop: 10,
-    marginBottom: 40,
+    marginBottom: 15,
+    position: "relative", // важно!
   },
-  allServicesButton: {
-    alignItems: "center",
-    backgroundColor: "rgba(0, 150, 255, 0.8)",
-    padding: 12,
-    borderRadius: 15,
-    width: 160,
-  },
-  allServicesText: { color: "white", fontWeight: "bold" },
+
   tipsContainer: {
     flexDirection: "row",
     paddingVertical: 10,
@@ -380,6 +390,38 @@ const styles = StyleSheet.create({
     color: "white",
     fontSize: 13,
     flexWrap: "wrap",
+  },
+  buttonsRow: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingHorizontal: 10,
+    marginBottom: 15,
+  },
+  allServicesButton: {
+    alignItems: "center",
+    backgroundColor: "rgba(0, 150, 255, 0.8)",
+    padding: 12,
+    borderRadius: 15,
+    paddingHorizontal: 20,
+    width: 160,
+  },
+  allServicesText: {
+    color: "white",
+    fontWeight: "bold",
+  },
+  chatButtonFixed: {
+    position: "absolute",
+    right: 20,
+    top: "50%",
+    transform: [{ translateY: -22 }], // вертикально центрируем
+    backgroundColor: "#007AFF",
+    padding: 14,
+    borderRadius: 30,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.3,
+    shadowRadius: 4,
   },
 });
 
