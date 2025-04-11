@@ -8,10 +8,12 @@ import {
 } from "react-native";
 import { useRoute } from "@react-navigation/native";
 import { LinearGradient } from "expo-linear-gradient";
+import { useTranslation } from "react-i18next";
 
 const CafeDetailsScreen = () => {
   const route = useRoute();
   const { cafe } = route.params;
+  const { t, i18n } = useTranslation();
 
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
@@ -30,19 +32,19 @@ const CafeDetailsScreen = () => {
             <Text style={styles.cafeName}>{cafe.name}</Text>
 
             <View style={styles.infoCard}>
-              <Text style={styles.label}>📍 Локация:</Text>
+              <Text style={styles.label}>📍 {t("Локация")}:</Text>
               <Text style={styles.value}>{cafe.location || "Не указана"}</Text>
 
-              <Text style={styles.label}>🕒 Время работы:</Text>
+              <Text style={styles.label}>🕒 {t("Время работы")}:</Text>
               <Text style={styles.value}>
                 {cafe.open_time && cafe.close_time
                   ? `${cafe.open_time} - ${cafe.close_time}`
                   : "Не указано"}
               </Text>
 
-              <Text style={styles.label}>📝 Описание:</Text>
+              <Text style={styles.label}>📝 {t("Описание")}:</Text>
               <Text style={styles.value}>
-                {cafe.description || "Нет описания"}
+                {cafe.description || t("Нет описания")}
               </Text>
             </View>
           </View>

@@ -13,6 +13,7 @@ import { useTranslation } from "react-i18next";
 import axios from "axios";
 import { LinearGradient } from "expo-linear-gradient";
 import { useNavigation } from "@react-navigation/native";
+import { Image } from "react-native";
 
 const ShopsScreen = () => {
   const { t } = useTranslation();
@@ -38,7 +39,7 @@ const ShopsScreen = () => {
   const fetchShops = async () => {
     try {
       const response = await axios.get(
-        "http://192.168.68.102:8000/api/services/"
+        "http://172.19.226.231:8000/api/services/"
       );
       setShops(response.data);
     } catch (error) {
@@ -103,22 +104,24 @@ const ShopsScreen = () => {
             ))}
           </ScrollView>
 
-          <FlatList
-            data={filteredShops}
-            keyExtractor={(item) => item.id.toString()}
-            numColumns={2}
-            contentContainerStyle={styles.gridContainer}
-            renderItem={({ item }) => (
-              <TouchableOpacity
-                style={styles.shopCard}
-                onPress={() =>
-                  navigation.navigate("ShopDetails", { shop: item })
-                }
-              >
-                <Text style={styles.shopName}>{item.name}</Text>
-              </TouchableOpacity>
-            )}
-          />
+          <ScrollView contentContainerStyle={styles.cafesList}>
+  {filteredShops.map((shop) => (
+    <TouchableOpacity
+      key={shop.id}
+      style={styles.cafeItem}
+      onPress={() => navigation.navigate("ShopDetails", { shop })}
+    >
+      {shop.image && (
+        <Image
+          source={{ uri: shop.image }}
+          style={styles.cafeImage}
+        />
+      )}
+      <Text style={styles.cafeName}>{shop.name}</Text>
+    </TouchableOpacity>
+  ))}
+</ScrollView>
+
         </View>
       </LinearGradient>
     </ImageBackground>
@@ -175,6 +178,38 @@ const styles = StyleSheet.create({
   selectedFilterText: {
     color: "white",
   },
+  cafesList: {
+    flexDirection: "row",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
+    paddingBottom: 100,
+  },
+  cafeItem: {
+    width: 170,
+    height: 170,
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "white",
+    borderRadius: 15,
+    margin: 10,
+    shadowColor: "#000",
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 6,
+  },
+  cafeImage: {
+    width: 80,
+    height: 80,
+    marginBottom: 8,
+    borderRadius: 10,
+  },
+  cafeName: {
+    fontSize: 16,
+    fontWeight: "bold",
+    color: "#333",
+    textAlign: "center",
+  },
+  
   gridContainer: {
     alignItems: "center",
     paddingBottom: 100,
@@ -193,10 +228,26 @@ const styles = StyleSheet.create({
     shadowRadius: 6,
   },
   shopName: {
-    fontSize: 16,
+    fontSize: 14,
     fontWeight: "500",
     textAlign: "center",
-    color: "#333",
+    color: "#fff",
+  },
+
+  shopImage: {
+    width: 170,
+    height: 170,
+    justifyContent: "flex-end",
+    overflow: "hidden",
+    borderRadius: 12,
+  },
+
+  shopOverlay: {
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+    paddingVertical: 6,
+    paddingHorizontal: 10,
+    borderBottomLeftRadius: 12,
+    borderBottomRightRadius: 12,
   },
 });
 

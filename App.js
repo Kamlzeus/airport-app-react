@@ -41,6 +41,7 @@ import TipDetailScreen from "./screens/TipDetailScreen";
 import ShopDetailsScreen from "./screens/ShopDetailsScreen";
 import CafeDetailsScreen from "./screens/CafeDetailsScreen";
 import ChatScreen from "./screens/ChatScreen";
+import InfoDetailScreen from "./screens/InfoDetailScreen";
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -194,6 +195,15 @@ function MainStack() {
         component={StoryScreen}
         options={{ headerShown: false }}
       />
+      <Stack.Screen
+        name="InfoDetail"
+        component={InfoDetailScreen}
+        options={{
+          title: t("Информация"),
+          headerBackTitle: t("Назад"),
+        }}
+      />
+
       <Stack.Screen name="CafeDetails" component={CafeDetailsScreen} />
       <Stack.Screen name="ShopDetails" component={ShopDetailsScreen} />
       <Stack.Screen

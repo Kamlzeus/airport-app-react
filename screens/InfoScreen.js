@@ -3,85 +3,23 @@ import {
   View,
   Text,
   TouchableOpacity,
-  Modal,
   ScrollView,
   StyleSheet,
-  StatusBar,
-  Dimensions,
 } from "react-native";
 import { LinearGradient } from "expo-linear-gradient";
 import { Ionicons } from "@expo/vector-icons";
 import { useTranslation } from "react-i18next";
-import RenderHTML from "react-native-render-html";
 import axios from "axios";
-import { useWindowDimensions } from "react-native";
+import { useNavigation } from "@react-navigation/native";
 
-const tagsStyles = {
-  h2: {
-    fontSize: 24,
-    fontWeight: "bold",
-    marginBottom: 10,
-    color: "#1a1a1a",
-    fontFamily: "serif",
-    textAlign: "justify",
-  },
-  h3: {
-    fontSize: 20,
-    fontWeight: "600",
-    marginVertical: 10,
-    color: "#333",
-    fontFamily: "serif",
-    textAlign: "justify",
-  },
-  p: {
-    fontSize: 20,
-    lineHeight: 24,
-    color: "#444",
-    marginBottom: 8,
-    fontFamily: "serif",
-    textAlign: "justify",
-  },
-  li: {
-    fontSize: 16,
-    lineHeight: 24,
-    marginBottom: 6,
-    color: "#444",
-    fontFamily: "serif",
-    textAlign: "justify",
-  },
-  strong: {
-    fontWeight: "bold",
-    color: "#000",
-    fontFamily: "serif",
-    textAlign: "justify",
-  },
-  ul: {
-    paddingLeft: 20,
-    marginBottom: 10,
-    fontFamily: "serif",
-    textAlign: "justify",
-  },
-  ol: {
-    paddingLeft: 20,
-    marginBottom: 10,
-    fontFamily: "serif",
-    textAlign: "justify",
-  },
-  img: {
-    width: "100%",
-    height: "auto",
-    marginBottom: 10,
-  },
-};
 const InfoScreen = () => {
   const [sections, setSections] = useState([]);
-  const [selectedSection, setSelectedSection] = useState(null);
   const { t, i18n } = useTranslation();
-  const { width } = useWindowDimensions();
+  const navigation = useNavigation();
 
   useEffect(() => {
     axios
-      .get("http://192.168.68.102:8000/api/info-sections/")
+      .get("http://172.19.226.231:8000/api/info-sections/")
       .then((res) => {
         setSections(res.data);
       })
@@ -95,13 +33,14 @@ const InfoScreen = () => {
 
   return (
     <View style={styles.container}>
-      <StatusBar barStyle="dark-content" />
       <ScrollView contentContainerStyle={styles.scrollContainer}>
         {sections.map((section) => (
           <TouchableOpacity
             key={section.id}
             style={styles.button}
-            onPress={() => setSelectedSection(section)}
+            onPress={() =>
+              navigation.navigate("InfoDetail", { section: section })
+            }
           >
             <LinearGradient
               colors={["#ffffff", "#cfd9df"]}
@@ -115,34 +54,6 @@ const InfoScreen = () => {
           </TouchableOpacity>
         ))}
       </ScrollView>
-
-      <Modal visible={!!selectedSection} animationType="slide">
-        <View style={styles.modalContainer}>
-          <ScrollView style={styles.modalContent}>
-            {selectedSection && (
-              <>
-                <Text style={styles.modalHeader}>
-                  {getLocalizedText(selectedSection, "title")}
-                </Text>
-                <RenderHTML
-                  contentWidth={width - 40}
-                  source={{
-                    html: getLocalizedText(selectedSection, "content"),
-                  }}
-                  tagsStyles={tagsStyles}
-                />
-              </>
-            )}
-          </ScrollView>
-
-          <TouchableOpacity
-            style={styles.closeButton}
-            onPress={() => setSelectedSection(null)}
-          >
-            <Text style={styles.closeButtonText}>{t("Закрыть")}</Text>
-          </TouchableOpacity>
-        </View>
-      </Modal>
     </View>
   );
 };
@@ -175,39 +86,6 @@ const styles = StyleSheet.create({
   },
   buttonText: {
     color: "black",
-    fontSize: 18,
-    fontWeight: "bold",
-  },
-  modalContainer: {
-    flex: 1,
-    backgroundColor: "white",
-    padding: 20,
-    marginTop: 60,
-  },
-  modalContent: {
-    flex: 1,
-  },
-  modalHeader: {
-    fontSize: 20,
-    fontWeight: "bold",
-    marginBottom: 15,
-    color: "black",
-    textAlign: "center",
-  },
-  modalText: {
-    fontSize: 18,
-    lineHeight: 24,
-    color: "#333",
-  },
-  closeButton: {
-    backgroundColor: "#FF3B30",
-    padding: 15,
-    borderRadius: 10,
-    alignItems: "center",
-    marginTop: 10,
-  },
-  closeButtonText: {
-    color: "white",
     fontSize: 18,
     fontWeight: "bold",
   },
