@@ -54,7 +54,7 @@ const TicketPurchaseScreen = ({ route, navigation }) => {
       setIsPurchasing(false);
       addTicket(newTicket); // 👈 добавляем билет
       Alert.alert(t("Ваш билет успешно куплен!"));
-      navigation.navigate("Предстоящие поездки");
+      navigation.navigate("MyTicketScreen");
     }, 2000);
   };
 

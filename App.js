@@ -345,7 +345,7 @@ function MainDrawer() {
         }}
       />
       <Drawer.Screen
-        name="Предстоящие поездки"
+        name="MyTicketScreen"
         component={MyTicketScreen}
         options={{
           title: t("Предстоящие поездки"),
@@ -423,9 +423,10 @@ export default function App() {
               })}
             />
             <Drawer.Screen
-              name={t("Предстоящие поездки")}
+              name="MyTicketScreen"
               component={MyTicketScreen}
               options={({ navigation }) => ({
+                title: t("Предстоящие поездки"),
                 headerLeft: () => (
                   <Ionicons
                     name="menu-outline"
