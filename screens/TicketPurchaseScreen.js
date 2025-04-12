@@ -13,23 +13,23 @@ import { usePurchasedTickets } from "../context/PurchasedTicketsContext";
 const airlines = [
   {
     name: "Asman Airlines",
-    logo: "https://upload.wikimedia.org/wikipedia/commons/e/e0/Airplane_silhouette.png",
+    logo: require("../assets/aasmann.png"),
   },
   {
-    name: "Eurasia Jet",
-    logo: "https://cdn-icons-png.flaticon.com/512/69/69981.png",
+    name: "Kyrgyzstan Airline",
+    logo: require("../assets/kyair.png"),
   },
   {
-    name: "SkyKyrgyz",
-    logo: "https://cdn-icons-png.flaticon.com/512/147/147258.png",
+    name: "Pegasus Airline",
+    logo: require("../assets/pegasus.png"),
   },
   {
-    name: "Nomad Wings",
-    logo: "https://cdn-icons-png.flaticon.com/512/2933/2933245.png",
+    name: "Qatar Airlines",
+    logo: require("../assets/quatar.png"),
   },
   {
-    name: "Silk Route Air",
-    logo: "https://cdn-icons-png.flaticon.com/512/484/484167.png",
+    name: "Emirates Airline",
+    logo: require("../assets/enirate.png"),
   },
 ];
 

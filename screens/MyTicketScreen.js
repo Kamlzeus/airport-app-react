@@ -52,9 +52,14 @@ const MyTicketScreen = () => {
             <View key={index} style={styles.flightCard}>
               <View style={styles.airlineContainer}>
                 <Image
-                  source={{ uri: flight.airlineLogo }}
+                  source={
+                    typeof flight.airlineLogo === "number"
+                      ? flight.airlineLogo
+                      : { uri: flight.airlineLogo }
+                  }
                   style={styles.logo}
                 />
+
                 <Text style={styles.airlineName}>{flight.airlineName}</Text>
               </View>
 
