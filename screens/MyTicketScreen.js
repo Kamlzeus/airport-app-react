@@ -4,34 +4,37 @@ import {
   Text,
   StyleSheet,
   ImageBackground,
-  TouchableOpacity,
   Image,
+  ScrollView,
 } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { useTranslation } from "react-i18next";
+import { usePurchasedTickets } from "../context/PurchasedTicketsContext";
 
 const MyTicketScreen = () => {
-  const { t } = useTranslation(); // Подключаем перевод
+  const { t } = useTranslation();
+  const { tickets: purchasedTickets } = usePurchasedTickets();
 
-  const flight = {
+  const defaultTicket = {
     airlineLogo:
       "https://companieslogo.com/img/orig/THYAO.IS-f22d40e8.png?t=1720244494",
     airlineName: "Turkish Airlines",
     ticketNumber: "Boeing 777",
     from: t("Манас (FRU)"),
     to: t("Стамбул (IST)"),
-    departureTime: "10:30",
-    departureDate: t("12 Марта"),
-    arrivalTime: "14:50",
-    arrivalDate: t("12 Марта"),
     duration: "4ч 20м",
     terminal: "1",
     gate: "B12",
     checkInDesk: "D3",
     exit: t("Выход") + ": Gate 5",
     status: t("Ожидается"),
+    price: "250 USD",
+    class: t("Эконом"),
+    date: "2025-05-27 – 2025-06-13",
   };
+
+  const displayedTickets = [defaultTicket, ...purchasedTickets];
 
   return (
     <ImageBackground
@@ -44,76 +47,71 @@ const MyTicketScreen = () => {
         colors={["rgba(0, 150, 255, 0.5)", "rgba(255, 255, 255, 1)"]}
         style={styles.gradient}
       >
-        <View style={styles.container}>
-          <View style={styles.flightCard}>
-            {/* Логотип + Название авиакомпании */}
-            <View style={styles.airlineContainer}>
-              <Image source={{ uri: flight.airlineLogo }} style={styles.logo} />
-              <Text style={styles.airlineName}>{flight.airlineName}</Text>
-            </View>
-
-            {/* № Билета */}
-            <Text style={styles.ticketNumber}>
-              {t("№ билета")}: {flight.ticketNumber}
-            </Text>
-
-            {/* Линия-разделитель */}
-            <View style={styles.separator} />
-
-            {/* Маршрут */}
-            <Text style={styles.routeText}>
-              {flight.from}{" "}
-              <Ionicons name="airplane-outline" size={20} color="black" />{" "}
-              {flight.to}
-            </Text>
-
-            {/* Вылет и прилёт */}
-            <View style={styles.flightInfoContainer}>
-              <View style={[styles.flightBox, styles.darkBlueBox]}>
-                <Text style={styles.boxTitle}>{t("Вылет")}</Text>
-                <Text style={styles.boxText}>
-                  {t("Время")}: {flight.departureTime}
-                </Text>
-                <Text style={styles.boxText}>
-                  {t("Дата")}: {flight.departureDate}
-                </Text>
-              </View>
-              <View style={[styles.flightBox, styles.blueBox]}>
-                <Text style={styles.boxTitle}>{t("Прилёт")}</Text>
-                <Text style={styles.boxText}>
-                  {t("Время")}: {flight.arrivalTime}
-                </Text>
-                <Text style={styles.boxText}>
-                  {t("Дата")}: {flight.arrivalDate}
-                </Text>
-              </View>
-            </View>
-
-            {/* Доп. информация */}
-            <View style={styles.extraInfoContainer}>
-              <View style={styles.extraInfoBox}>
-                <Ionicons name="exit-outline" size={20} color="gray" />
-                <Text style={styles.extraText}>{flight.exit}</Text>
-              </View>
-              <View style={styles.extraInfoBox}>
-                <Ionicons name="clipboard-outline" size={20} color="gray" />
-                <Text style={styles.extraText}>
-                  {t("Стойка регистрации")}: {flight.checkInDesk}
-                </Text>
-              </View>
-              <View style={styles.extraInfoBox}>
-                <Ionicons
-                  name="checkmark-circle-outline"
-                  size={20}
-                  color="gray"
+        <ScrollView contentContainerStyle={styles.container}>
+          {displayedTickets.map((flight, index) => (
+            <View key={index} style={styles.flightCard}>
+              <View style={styles.airlineContainer}>
+                <Image
+                  source={{ uri: flight.airlineLogo }}
+                  style={styles.logo}
                 />
-                <Text style={styles.extraText}>
-                  {t("Статус")}: {flight.status}
-                </Text>
+                <Text style={styles.airlineName}>{flight.airlineName}</Text>
+              </View>
+
+              <Text style={styles.ticketNumber}>
+                {t("№ билета")}: {flight.ticketNumber}
+              </Text>
+
+              <View style={styles.separator} />
+
+              <Text style={styles.routeText}>
+                {flight.from}{" "}
+                <Ionicons name="airplane-outline" size={20} color="black" />{" "}
+                {flight.to}
+              </Text>
+
+              <View style={styles.flightInfoContainer}>
+                <View style={[styles.flightBox, styles.darkBlueBox]}>
+                  <Text style={styles.boxTitle}>{t("Вылет")}</Text>
+                  <Text style={styles.boxText}>
+                    {t("Дата")}: {flight.date?.split("–")[0]}
+                  </Text>
+                </View>
+                <View style={[styles.flightBox, styles.blueBox]}>
+                  <Text style={styles.boxTitle}>{t("Прилёт")}</Text>
+                  <Text style={styles.boxText}>
+                    {t("Дата")}: {flight.date?.split("–")[1]}
+                  </Text>
+                </View>
+              </View>
+
+              <View style={styles.extraInfoContainer}>
+                <View style={styles.extraInfoBox}>
+                  <Ionicons name="cash-outline" size={20} color="gray" />
+                  <Text style={styles.extraText}>
+                    {t("Цена")}: {flight.price}
+                  </Text>
+                </View>
+                <View style={styles.extraInfoBox}>
+                  <Ionicons name="layers-outline" size={20} color="gray" />
+                  <Text style={styles.extraText}>
+                    {t("Класс")}: {flight.class}
+                  </Text>
+                </View>
+                <View style={styles.extraInfoBox}>
+                  <Ionicons
+                    name="checkmark-circle-outline"
+                    size={20}
+                    color="gray"
+                  />
+                  <Text style={styles.extraText}>
+                    {t("Статус")}: {t("Ожидается")}
+                  </Text>
+                </View>
               </View>
             </View>
-          </View>
-        </View>
+          ))}
+        </ScrollView>
       </LinearGradient>
     </ImageBackground>
   );
@@ -126,19 +124,18 @@ const styles = StyleSheet.create({
   },
   gradient: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    paddingHorizontal: 20,
   },
   container: {
     alignItems: "center",
-    width: "100%",
+    paddingVertical: 30,
+    paddingHorizontal: 20,
   },
   flightCard: {
-    width: "90%",
-    backgroundColor: "rgba(255, 255, 255, 0.82)", // Полупрозрачный белый фон
+    width: "100%",
+    backgroundColor: "rgba(255, 255, 255, 0.82)",
     padding: 20,
     borderRadius: 15,
+    marginBottom: 20,
     shadowColor: "#000",
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.2,
@@ -209,7 +206,6 @@ const styles = StyleSheet.create({
   boxText: {
     fontSize: 14,
     color: "white",
-    alignItems: "left",
   },
   extraInfoContainer: {
     width: "100%",

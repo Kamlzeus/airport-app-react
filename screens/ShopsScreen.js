@@ -39,7 +39,7 @@ const ShopsScreen = () => {
   const fetchShops = async () => {
     try {
       const response = await axios.get(
-        "http://172.19.226.231:8000/api/services/"
+        "http://192.168.68.102:8000/api/services/"
       );
       setShops(response.data);
     } catch (error) {
@@ -105,23 +105,22 @@ const ShopsScreen = () => {
           </ScrollView>
 
           <ScrollView contentContainerStyle={styles.cafesList}>
-  {filteredShops.map((shop) => (
-    <TouchableOpacity
-      key={shop.id}
-      style={styles.cafeItem}
-      onPress={() => navigation.navigate("ShopDetails", { shop })}
-    >
-      {shop.image && (
-        <Image
-          source={{ uri: shop.image }}
-          style={styles.cafeImage}
-        />
-      )}
-      <Text style={styles.cafeName}>{shop.name}</Text>
-    </TouchableOpacity>
-  ))}
-</ScrollView>
-
+            {filteredShops.map((shop) => (
+              <TouchableOpacity
+                key={shop.id}
+                style={styles.cafeItem}
+                onPress={() => navigation.navigate("ShopDetails", { shop })}
+              >
+                {shop.image && (
+                  <Image
+                    source={{ uri: shop.image }}
+                    style={styles.cafeImage}
+                  />
+                )}
+                <Text style={styles.cafeName}>{shop.name}</Text>
+              </TouchableOpacity>
+            ))}
+          </ScrollView>
         </View>
       </LinearGradient>
     </ImageBackground>
@@ -209,7 +208,7 @@ const styles = StyleSheet.create({
     color: "#333",
     textAlign: "center",
   },
-  
+
   gridContainer: {
     alignItems: "center",
     paddingBottom: 100,

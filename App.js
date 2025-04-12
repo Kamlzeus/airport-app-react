@@ -1,3 +1,4 @@
+import "fast-text-encoding";
 import { LogBox } from "react-native";
 LogBox.ignoreLogs(["Support for defaultProps"]);
 
@@ -42,6 +43,8 @@ import ShopDetailsScreen from "./screens/ShopDetailsScreen";
 import CafeDetailsScreen from "./screens/CafeDetailsScreen";
 import ChatScreen from "./screens/ChatScreen";
 import InfoDetailScreen from "./screens/InfoDetailScreen";
+import { PurchasedTicketsProvider } from "./context/PurchasedTicketsContext";
+
 const Tab = createBottomTabNavigator();
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -381,75 +384,77 @@ export default function App() {
   const { t } = useTranslation();
   return (
     <AuthProvider>
-      <NavigationContainer>
-        <Drawer.Navigator>
-          <Drawer.Screen
-            name={t("Главная")}
-            component={MainStack}
-            options={{ headerShown: false }}
-          />
-          <Drawer.Screen
-            name={t("Мой профиль")}
-            component={ProfileScreen}
-            options={({ navigation }) => ({
-              headerLeft: () => (
-                <Ionicons
-                  name="menu-outline"
-                  size={24}
-                  color="black"
-                  style={{ marginLeft: 15 }}
-                  onPress={() => navigation.openDrawer()} // Открытие бокового меню
-                />
-              ),
-            })}
-          />
-          <Drawer.Screen
-            name={t("История Поездок")}
-            component={TripHistoryScreen}
-            options={({ navigation }) => ({
-              headerLeft: () => (
-                <Ionicons
-                  name="menu-outline"
-                  size={24}
-                  color="black"
-                  style={{ marginLeft: 15 }}
-                  onPress={() => navigation.openDrawer()} // Открытие бокового меню
-                />
-              ),
-            })}
-          />
-          <Drawer.Screen
-            name={t("Предстоящие поездки")}
-            component={MyTicketScreen}
-            options={({ navigation }) => ({
-              headerLeft: () => (
-                <Ionicons
-                  name="menu-outline"
-                  size={24}
-                  color="black"
-                  style={{ marginLeft: 15 }}
-                  onPress={() => navigation.openDrawer()} // Открытие бокового меню
-                />
-              ),
-            })}
-          />
-          <Drawer.Screen
-            name={t("Настройки профиля")}
-            component={ProfileSettings}
-            options={({ navigation }) => ({
-              headerLeft: () => (
-                <Ionicons
-                  name="menu-outline"
-                  size={24}
-                  color="black"
-                  style={{ marginLeft: 15 }}
-                  onPress={() => navigation.openDrawer()} // Открытие бокового меню
-                />
-              ),
-            })}
-          />
-        </Drawer.Navigator>
-      </NavigationContainer>
+      <PurchasedTicketsProvider>
+        <NavigationContainer>
+          <Drawer.Navigator>
+            <Drawer.Screen
+              name={t("Главная")}
+              component={MainStack}
+              options={{ headerShown: false }}
+            />
+            <Drawer.Screen
+              name={t("Мой профиль")}
+              component={ProfileScreen}
+              options={({ navigation }) => ({
+                headerLeft: () => (
+                  <Ionicons
+                    name="menu-outline"
+                    size={24}
+                    color="black"
+                    style={{ marginLeft: 15 }}
+                    onPress={() => navigation.openDrawer()} // Открытие бокового меню
+                  />
+                ),
+              })}
+            />
+            <Drawer.Screen
+              name={t("История Поездок")}
+              component={TripHistoryScreen}
+              options={({ navigation }) => ({
+                headerLeft: () => (
+                  <Ionicons
+                    name="menu-outline"
+                    size={24}
+                    color="black"
+                    style={{ marginLeft: 15 }}
+                    onPress={() => navigation.openDrawer()} // Открытие бокового меню
+                  />
+                ),
+              })}
+            />
+            <Drawer.Screen
+              name={t("Предстоящие поездки")}
+              component={MyTicketScreen}
+              options={({ navigation }) => ({
+                headerLeft: () => (
+                  <Ionicons
+                    name="menu-outline"
+                    size={24}
+                    color="black"
+                    style={{ marginLeft: 15 }}
+                    onPress={() => navigation.openDrawer()} // Открытие бокового меню
+                  />
+                ),
+              })}
+            />
+            <Drawer.Screen
+              name={t("Настройки профиля")}
+              component={ProfileSettings}
+              options={({ navigation }) => ({
+                headerLeft: () => (
+                  <Ionicons
+                    name="menu-outline"
+                    size={24}
+                    color="black"
+                    style={{ marginLeft: 15 }}
+                    onPress={() => navigation.openDrawer()} // Открытие бокового меню
+                  />
+                ),
+              })}
+            />
+          </Drawer.Navigator>
+        </NavigationContainer>
+      </PurchasedTicketsProvider>
     </AuthProvider>
   );
 }

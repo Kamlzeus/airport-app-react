@@ -10,7 +10,7 @@ export default function SplashScreen({ onEnd }) {
       if (typeof onEnd === "function") {
         onEnd();
       }
-    }, 5000);
+    }, 1500);
 
     return () => clearTimeout(timer);
   }, []);
@@ -19,7 +19,7 @@ export default function SplashScreen({ onEnd }) {
     <View style={styles.container}>
       <Video
         ref={videoRef}
-        source={require("../assets/animeee.mp4")}
+        source={require("../assets/animkarenat.mp4")}
         style={styles.fullscreen}
         resizeMode="cover"
         shouldPlay

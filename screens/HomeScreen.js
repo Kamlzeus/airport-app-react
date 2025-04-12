@@ -34,7 +34,7 @@ const HomeScreen = () => {
   const fetchTips = async () => {
     try {
       const response = await axios.get(
-        "http://172.19.226.231:8000/api/info-banners/"
+        "http://192.168.68.102:8000/api/info-banners/"
       );
       setTips(response.data);
     } catch (error) {

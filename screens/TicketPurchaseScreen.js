@@ -9,19 +9,52 @@ import {
 } from "react-native";
 import { useTranslation } from "react-i18next";
 import { LinearGradient } from "expo-linear-gradient";
+import { usePurchasedTickets } from "../context/PurchasedTicketsContext";
+const airlines = [
+  {
+    name: "Asman Airlines",
+    logo: "https://upload.wikimedia.org/wikipedia/commons/e/e0/Airplane_silhouette.png",
+  },
+  {
+    name: "Eurasia Jet",
+    logo: "https://cdn-icons-png.flaticon.com/512/69/69981.png",
+  },
+  {
+    name: "SkyKyrgyz",
+    logo: "https://cdn-icons-png.flaticon.com/512/147/147258.png",
+  },
+  {
+    name: "Nomad Wings",
+    logo: "https://cdn-icons-png.flaticon.com/512/2933/2933245.png",
+  },
+  {
+    name: "Silk Route Air",
+    logo: "https://cdn-icons-png.flaticon.com/512/484/484167.png",
+  },
+];
 
 const TicketPurchaseScreen = ({ route, navigation }) => {
   const { purchasedFlight } = route.params;
   const { t } = useTranslation();
   const [isPurchasing, setIsPurchasing] = useState(false);
+  const { addTicket } = usePurchasedTickets(); // 👈
 
   const handlePurchase = () => {
     setIsPurchasing(true);
 
     setTimeout(() => {
+      const randomAirline =
+        airlines[Math.floor(Math.random() * airlines.length)];
+      const newTicket = {
+        ...purchasedFlight,
+        airlineName: randomAirline.name,
+        airlineLogo: randomAirline.logo,
+        ticketNumber: `TK${Math.floor(100000 + Math.random() * 900000)}`,
+      };
       setIsPurchasing(false);
+      addTicket(newTicket); // 👈 добавляем билет
       Alert.alert(t("Ваш билет успешно куплен!"));
-      navigation.navigate("Главная");
+      navigation.navigate("Предстоящие поездки");
     }, 2000);
   };
 

@@ -19,7 +19,7 @@ const InfoScreen = () => {
 
   useEffect(() => {
     axios
-      .get("http://172.19.226.231:8000/api/info-sections/")
+      .get("http://192.168.68.102:8000/api/info-sections/")
       .then((res) => {
         setSections(res.data);
       })

@@ -29,6 +29,7 @@
     "expo-linear-gradient": "~14.0.1",
     "expo-notifications": "^0.29.14",
     "expo-status-bar": "~2.0.0",
+    "fast-text-encoding": "^1.0.6",
     "i18next": "^24.2.2",
     "package-name": "^0.1.0",
     "react": "18.3.1",

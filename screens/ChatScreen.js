@@ -32,7 +32,7 @@ const ChatScreen = () => {
 
     try {
       const response = await axios.post(
-        "http://172.19.226.231:8000/api/chat/message/",
+        "http://192.168.68.102:8000/api/chat/message/",
         { message: userInput }
       );
       const botMessage = { sender: "bot", text: response.data.reply };
