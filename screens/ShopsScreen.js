@@ -16,11 +16,23 @@ import { useNavigation } from "@react-navigation/native";
 import { Image } from "react-native";
 
 const ShopsScreen = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation(); // ✅ теперь и t, и i18n
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [shops, setShops] = useState([]);
   const navigation = useNavigation();
+  const getLocalizedName = (shop) => {
+    const lang = i18n.language;
+    switch (lang) {
+      case "ru":
+        return shop.name_ru || "";
+      case "ky":
+        return shop.name_ky || "";
+      case "en":
+      default:
+        return shop.name_en || "";
+    }
+  };
 
   const categoryLabels = {
     all: t("Все"),
@@ -50,9 +62,10 @@ const ShopsScreen = () => {
   const filteredShops = shops.filter((shop) => {
     const matchesCategory =
       selectedCategory === "all" || shop.service_type === selectedCategory;
-    const matchesSearch = shop.name
-      .toLowerCase()
-      .includes(searchQuery.toLowerCase());
+
+    const name = getLocalizedName(shop).toLowerCase();
+    const matchesSearch = name.includes(searchQuery.toLowerCase());
+
     return matchesCategory && matchesSearch;
   });
 
@@ -117,7 +130,7 @@ const ShopsScreen = () => {
                     style={styles.cafeImage}
                   />
                 )}
-                <Text style={styles.cafeName}>{shop.name}</Text>
+                <Text style={styles.cafeName}>{getLocalizedName(shop)}</Text>
               </TouchableOpacity>
             ))}
           </ScrollView>

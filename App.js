@@ -207,8 +207,22 @@ function MainStack() {
         }}
       />
 
-      <Stack.Screen name="CafeDetails" component={CafeDetailsScreen} />
-      <Stack.Screen name="ShopDetails" component={ShopDetailsScreen} />
+      <Stack.Screen
+        name="CafeDetails"
+        component={CafeDetailsScreen}
+        options={{
+          title: t("Информация о кафе"),
+          headerBackTitle: t("Назад"),
+        }}
+      />
+      <Stack.Screen
+        name="ShopDetails"
+        component={ShopDetailsScreen}
+        options={{
+          title: t("Информация о магазине"),
+          headerBackTitle: t("Назад"),
+        }}
+      />
       <Stack.Screen
         name="EditScreen"
         component={EditScreen}

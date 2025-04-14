@@ -12,7 +12,7 @@ import { useTranslation } from "react-i18next";
 import axios from "axios";
 
 const FlyflyScreen = () => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const [activeTab, setActiveTab] = useState("departure");
   const [searchQuery, setSearchQuery] = useState("");
   const [flights, setFlights] = useState([]);
@@ -40,13 +40,16 @@ const FlyflyScreen = () => {
     }
   };
 
+  const safeLower = (str) => (typeof str === "string" ? str.toLowerCase() : "");
+
   const applyFilters = () => {
-    const filtered = flights.filter(
-      (flight) =>
-        flight.airline.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        flight.flight_code.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        flight.city.toLowerCase().includes(searchQuery.toLowerCase())
-    );
+    const filtered = flights.filter((flight) => {
+      return (
+        safeLower(flight.airline).includes(searchQuery.toLowerCase()) ||
+        safeLower(flight.flight_code).includes(searchQuery.toLowerCase()) ||
+        safeLower(getLocalizedCity(flight)).includes(searchQuery.toLowerCase())
+      );
+    });
 
     if (filtered.length === 0) {
       Alert.alert(t("Нет рейсов"), t("Не найдено рейсов по вашему запросу."));
@@ -58,6 +61,32 @@ const FlyflyScreen = () => {
     }
 
     setFilteredFlights(filtered);
+  };
+
+  const getLocalizedCity = (flight) => {
+    const lang = i18n.language;
+    switch (lang) {
+      case "ru":
+        return flight.arrival_city;
+      case "en":
+        return flight.arrival_city_en;
+      case "kg":
+      case "ky":
+        return flight.arrival_city_kg;
+      default:
+        return flight.arrival_city;
+    }
+  };
+
+  const getLocalizedStatus = (status) => {
+    const translations = {
+      scheduled: t("По расписанию"),
+      boarding: t("Посадка"),
+      landed: t("Приземлился"),
+      delayed: t("Задержан"),
+      cancelled: t("Отменён"),
+    };
+    return translations[status] || status;
   };
 
   return (
@@ -130,25 +159,27 @@ const FlyflyScreen = () => {
           </Text>
         </View>
         <FlatList
+          style={{ flex: 1 }}
+          contentContainerStyle={{ paddingBottom: 10 }}
           data={filteredFlights.length > 0 ? filteredFlights : flights}
           keyExtractor={(item) => item.id.toString()}
           renderItem={({ item }) => (
             <View style={styles.tableRow}>
               <Text style={styles.tableCell}>{item.airline}</Text>
               <Text style={styles.tableCell}>{item.flight_code}</Text>
-              <Text style={styles.tableCell}>{item.city}</Text>
+              <Text style={styles.tableCell}>{getLocalizedCity(item)}</Text>
               <Text style={styles.tableCell}>
                 {new Date(item.time).toLocaleString()}
               </Text>
               <Text
                 style={[
                   styles.tableCell,
-                  item.status === t("Вовремя") && styles.statusOnTime,
-                  item.status === t("Задержан") && styles.statusDelayed,
-                  item.status === t("Отменен") && styles.statusCancelled,
+                  item.status === "scheduled" && styles.statusOnTime,
+                  item.status === "delayed" && styles.statusDelayed,
+                  item.status === "cancelled" && styles.statusCancelled,
                 ]}
               >
-                {item.status}
+                {getLocalizedStatus(item.status)}
               </Text>
             </View>
           )}
@@ -212,6 +243,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
   },
   table: {
+    flex: 1,
     paddingHorizontal: 10,
   },
   tableRow: {

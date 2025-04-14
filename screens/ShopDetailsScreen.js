@@ -14,6 +14,24 @@ const ShopDetailsScreen = () => {
   const route = useRoute();
   const { shop } = route.params;
   const { t, i18n } = useTranslation();
+  const currentLang = i18n.language;
+
+  const getLocalizedField = (baseName) => {
+    const lang = i18n.language.toLowerCase();
+
+    const valueMap = {
+      ru: shop[`${baseName}_ru`] || (lang === "ru" ? shop[baseName] : null),
+      en: shop[`${baseName}_en`],
+      ky: shop[`${baseName}_ky`],
+      kg: shop[`${baseName}_ky`], // на всякий случай
+    };
+
+    return valueMap[lang] || shop[`${baseName}_en`] || shop[baseName] || "";
+  };
+
+  const localizedName = getLocalizedField("name");
+  const localizedDescription = getLocalizedField("description");
+  const localizedLocation = getLocalizedField("location");
 
   return (
     <ScrollView contentContainerStyle={{ flexGrow: 1 }}>
@@ -29,11 +47,11 @@ const ShopDetailsScreen = () => {
           style={styles.gradient}
         >
           <View style={styles.content}>
-            <Text style={styles.shopName}>{shop.name}</Text>
+            <Text style={styles.shopName}>{localizedName}</Text>
 
             <View style={styles.infoCard}>
               <Text style={styles.label}>📍 {t("Локация")}:</Text>
-              <Text style={styles.value}>{shop.location}</Text>
+              <Text style={styles.value}>{localizedLocation}</Text>
 
               <Text style={styles.label}>🕒 {t("Время работы")}:</Text>
               <Text style={styles.value}>
@@ -42,7 +60,7 @@ const ShopDetailsScreen = () => {
 
               <Text style={styles.label}>📝 {t("Описание")}:</Text>
               <Text style={styles.value}>
-                {shop.description || t("Нет описания")}
+                {localizedDescription || t("Нет описания")}
               </Text>
             </View>
           </View>

@@ -78,7 +78,7 @@ const HomeScreen = () => {
   );
 
   return (
-    <ScrollView style={styles.container}>
+    <View style={styles.container}>
       {/* Фон и градиент */}
       <ImageBackground
         source={{
@@ -249,7 +249,7 @@ const HomeScreen = () => {
           </ScrollView>
         </LinearGradient>
       </ImageBackground>
-    </ScrollView>
+    </View>
   );
 };
 
@@ -280,7 +280,7 @@ const styles = StyleSheet.create({
   storiesContainer: {
     flexDirection: "row",
     marginTop: 10,
-    marginBottom: 5,
+    marginBottom: 50,
   },
   storyCircle: {
     width: 70,
@@ -346,6 +346,7 @@ const styles = StyleSheet.create({
     width: 130,
     height: 130,
     marginHorizontal: 8.5,
+    marginBottom: 20,
   },
   serviceIcon: {
     width: 50,
@@ -375,8 +376,8 @@ const styles = StyleSheet.create({
     borderRadius: 15,
     padding: 15,
     marginHorizontal: 5,
-    width: 250,
-    height: 170,
+    width: 260,
+    height: 190,
     overflow: "hidden",
     justifyContent: "center",
   },
