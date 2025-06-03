@@ -51,7 +51,7 @@ const ShopsScreen = () => {
   const fetchShops = async () => {
     try {
       const response = await axios.get(
-        "http://192.168.68.107:8000/api/services/"
+        "http://192.168.68.112:8000/api/services/"
       );
       setShops(response.data);
     } catch (error) {

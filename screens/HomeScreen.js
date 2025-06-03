@@ -19,6 +19,7 @@ import LanguageSwitcher from "../LanguageSwitcher";
 import axios from "axios";
 import ChatBox from "../screens/ChatScreen"; // уже есть, если нет — см. предыдущий ответ
 import { Modal } from "react-native";
+import { SafeAreaView, useWindowDimensions } from "react-native";
 
 const HomeScreen = () => {
   const { t } = useTranslation();
@@ -34,7 +35,7 @@ const HomeScreen = () => {
   const fetchTips = async () => {
     try {
       const response = await axios.get(
-        "http://192.168.68.107:8000/api/info-banners/"
+        "http://192.168.68.112:8000/api/info-banners/"
       );
       setTips(response.data);
     } catch (error) {
@@ -78,7 +79,7 @@ const HomeScreen = () => {
   );
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
       {/* Фон и градиент */}
       <ImageBackground
         source={{
@@ -249,38 +250,51 @@ const HomeScreen = () => {
           </ScrollView>
         </LinearGradient>
       </ImageBackground>
-    </View>
+    </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1 },
-  imageBackground: { flex: 1, justifyContent: "center" },
-  gradient: { flex: 1, paddingTop: 40 },
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+  },
+  imageBackground: {
+    flex: 1,
+    resizeMode: "cover",
+  },
+  gradient: {
+    flex: 1,
+    paddingTop: 40,
+    paddingHorizontal: 10,
+  },
+  customHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: 5,
+  },
   header: {
     flexDirection: "row",
     alignItems: "center",
-    paddingHorizontal: 50,
-    paddingVertical: 25,
+    marginBottom: 25,
+    justifyContent: "center",
   },
-  logo: { width: 59, height: 59, borderRadius: 25, marginRight: 2 },
-  customHeader: {
-    flexDirection: "row",
-    justifyContent: "space-between", // Размещаем элементы по краям
-    alignItems: "center",
-    paddingHorizontal: 20,
-    paddingTop: 20,
+  logo: {
+    width: 50,
+    height: 50,
+    marginRight: 10,
+    borderRadius: 25,
   },
   title: {
-    fontSize: 25,
-    fontWeight: "bold",
-    flex: 1,
-    textAlign: "center",
+    fontSize: 22,
+    fontWeight: "700",
+    color: "#000",
   },
   storiesContainer: {
     flexDirection: "row",
-    marginTop: 10,
-    marginBottom: 50,
+    marginVertical: 10,
+    paddingHorizontal: 5,
   },
   storyCircle: {
     width: 70,
@@ -299,130 +313,122 @@ const styles = StyleSheet.create({
   topSection: {
     flexDirection: "row",
     alignItems: "center",
-    marginVertical: 20,
+    marginVertical: 10,
+    paddingHorizontal: 10,
   },
   notificationContainer: {
-    width: 50,
-    height: 50,
-    borderRadius: 25,
+    width: 44,
+    height: 44,
+    borderRadius: 22,
     backgroundColor: "#fff",
     justifyContent: "center",
     alignItems: "center",
-    marginLeft: 20,
-    marginRight: 20,
+    marginRight: 10,
   },
   notificationIcon: {
     width: 25,
     height: 25,
+    resizeMode: "contain",
   },
   searchContainer: {
-    maxWidth: 330,
     flex: 1,
     flexDirection: "row",
     alignItems: "center",
-    backgroundColor: "white",
+    backgroundColor: "#fff",
     borderRadius: 20,
-    paddingHorizontal: 20,
-    alignSelf: "center",
+    paddingHorizontal: 15,
+    paddingVertical: 8,
+    shadowColor: "#000",
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 1 },
+    elevation: 2,
   },
   searchInput: {
     flex: 1,
-    paddingVertical: 10,
     fontSize: 16,
+    color: "#000",
   },
   searchIcon: {
-    marginLeft: 10,
+    marginLeft: 8,
   },
   services: {
     flexDirection: "row",
-    paddingVertical: 30,
+    paddingVertical: 10,
+    paddingHorizontal: 5,
   },
   serviceButton: {
     alignItems: "center",
-    justifyContent: "center", // Центрируем все элементы внутри кнопки
-    backgroundColor: "rgba(255, 255, 255, 0.8)",
-    padding: 10,
+    justifyContent: "center",
+    backgroundColor: "#ffffffcc",
+    padding: 15,
     borderRadius: 20,
-    width: 130,
-    height: 130,
-    marginHorizontal: 8.5,
-    marginBottom: 20,
+    width: 120,
+    height: 120,
+    marginHorizontal: 6,
   },
   serviceIcon: {
-    width: 50,
-    height: 50,
-    marginBottom: 10,
-    tintColor: "#00609E", // Расстояние между иконкой и текстом
+    width: 45,
+    height: 45,
+    marginBottom: 8,
   },
   serviceText: {
-    color: "black",
+    fontSize: 13,
+    color: "#000",
     fontWeight: "500",
     textAlign: "center",
   },
   centerButtonContainer: {
-    width: "100%", // чтобы занять всю ширину
-    alignItems: "center", // по центру
-    marginTop: 10,
-    marginBottom: 15,
-    position: "relative", // важно!
-  },
-
-  tipsContainer: {
-    flexDirection: "row",
-    paddingVertical: 10,
-    marginBottom: 90,
-  },
-  tipCard: {
-    borderRadius: 15,
-    padding: 15,
-    marginHorizontal: 5,
-    width: 260,
-    height: 190,
-    overflow: "hidden",
-    justifyContent: "center",
-  },
-  tipTitle: {
-    fontWeight: "bold",
-    color: "white",
-    marginBottom: 15,
-    fontSize: 20,
-  },
-  tipDescription: {
-    color: "white",
-    fontSize: 13,
-    flexWrap: "wrap",
-  },
-  buttonsRow: {
-    flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
-    paddingHorizontal: 10,
-    marginBottom: 15,
+    marginTop: 10,
+    marginBottom: 5,
+    position: "relative",
   },
   allServicesButton: {
-    alignItems: "center",
-    backgroundColor: "rgba(0, 150, 255, 0.8)",
-    padding: 12,
-    borderRadius: 15,
+    backgroundColor: "#0096FFcc",
+    paddingVertical: 12,
     paddingHorizontal: 20,
-    width: 160,
+    borderRadius: 20,
   },
   allServicesText: {
-    color: "white",
+    color: "#fff",
+    fontSize: 15,
     fontWeight: "bold",
   },
   chatButtonFixed: {
     position: "absolute",
     right: 20,
     top: "50%",
-    transform: [{ translateY: -22 }], // вертикально центрируем
+    transform: [{ translateY: -25 }],
     backgroundColor: "#007AFF",
-    padding: 14,
-    borderRadius: 30,
-    shadowColor: "#000",
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.3,
-    shadowRadius: 4,
+    padding: 12,
+    borderRadius: 28,
+    elevation: 3,
+  },
+  tipsContainer: {
+    flexDirection: "row",
+    paddingVertical: 10,
+    paddingHorizontal: 5,
+    marginBottom: 60,
+    marginTop: 35,
+  },
+  tipCard: {
+    borderRadius: 15,
+    padding: 15,
+    marginHorizontal: 5,
+    width: 260,
+    height: 180,
+    justifyContent: "center",
+    backgroundColor: "#00B9FF",
+  },
+  tipTitle: {
+    color: "#fff",
+    fontSize: 18,
+    fontWeight: "bold",
+    marginBottom: 10,
+  },
+  tipDescription: {
+    color: "#fff",
+    fontSize: 13,
   },
 });
 

@@ -25,7 +25,7 @@ const FlyflyScreen = () => {
   const fetchFlights = async () => {
     try {
       const response = await axios.get(
-        "http://192.168.68.107:8000/api/flights/",
+        "http://192.168.68.112:8000/api/flights/",
         {
           params: {
             is_arrival: activeTab === "arrival",

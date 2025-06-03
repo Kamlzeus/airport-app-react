@@ -288,7 +288,7 @@ const TicketsScreen = () => {
     setLoading(true);
     try {
       const response = await axios.get(
-        "http://192.168.68.107:8000/api/flights/search/",
+        "http://192.168.68.112:8000/api/flights/search/",
         {
           params: {
             origin,
@@ -353,13 +353,13 @@ const TicketsScreen = () => {
   const renderFlight = ({ item }) => (
     <View style={styles.flightCard}>
       <Text style={styles.flightText}>
-        🛫 {item.origin} → {item.destination}
+        {item.origin} → {item.destination}
       </Text>
       <Text style={styles.flightText}>
-        📅 {item.depart_date} – {item.return_date}
+        {item.depart_date} – {item.return_date}
       </Text>
       <Text style={styles.flightText}>
-        💺 {t("Класс")}:{" "}
+        {t("Класс")}:{" "}
         {
           [t("Класс.Эконом"), t("Класс.Бизнес"), t("Класс.Первый класс")][
             item.trip_class
@@ -367,13 +367,13 @@ const TicketsScreen = () => {
         }
       </Text>
       <Text style={styles.flightText}>
-        💲 {t("Цена")}: {item.value} {currency.toUpperCase()}
+        {t("Цена")}: {item.value} {currency.toUpperCase()}
       </Text>
       <Text style={styles.flightText}>
-        🔁 {t("Пересадок")}: {item.number_of_changes}
+        {t("Пересадок")}: {item.number_of_changes}
       </Text>
       <Text style={styles.flightText}>
-        📍 {t("Площадка")}:: {item.gate}
+        {t("Площадка")}: {item.gate}
       </Text>
       <TouchableOpacity
         style={styles.buyButton}
